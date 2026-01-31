@@ -1,0 +1,52 @@
+[
+    {
+        "id": "1",
+        "type": "question",
+        "author": {
+            "name": "Alice",
+            "badge": "Newbie"
+        },
+        "content": {
+            "text": "What is the best way to start learning UX design for beginners?"
+        },
+        "stats": {
+            "likes": 12,
+            "comments": 5,
+            "time": "2h ago"
+        }
+    },
+    {
+        "id": "2",
+        "type": "review",
+        "author": {
+            "name": "Bella",
+            "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=2264&auto=format&fit=crop",
+            "badge": "Pro"
+        },
+        "content": {
+            "text": "Just finished the 'Deep Dive React' course. Absolutely unified my understanding of hooks.",
+            "rating": 5,
+            "title": "Must take for React devs"
+        },
+        "stats": {
+            "likes": 45,
+            "comments": 12,
+            "time": "5h ago"
+        }
+    },
+    {
+        "id": "3",
+        "type": "question",
+        "author": {
+            "name": "Catherine"
+        },
+        "content": {
+            "text": "Has anyone tried the new iPad for note taking? Is it worth it?"
+        },
+        "stats": {
+            "likes": 8,
+            "comments": 20,
+            "time": "1d ago"
+        }
+    }
+]
