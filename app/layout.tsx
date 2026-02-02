@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={cn(inter.variable, playfair.variable, "min-h-screen flex flex-col font-sans bg-background text-text-main selection:bg-accent-rose/30")}>
+            <body className={cn(inter.variable, playfair.variable, "min-h-screen flex flex-col font-sans bg-background text-foreground antialiased selection:bg-primary/20")}>
                 <Providers>
                     <Navbar />
                     <main className="flex-1 w-full">

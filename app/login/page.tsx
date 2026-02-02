@@ -17,7 +17,6 @@ export default function LoginPage() {
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
 
-        // Use NextAuth signIn
         const result = await signIn("credentials", {
             email,
             password,
@@ -28,53 +27,53 @@ export default function LoginPage() {
             alert("Invalid credentials. Try test@example.com / password123");
             setIsLoading(false);
         } else {
-            router.push("/");
+            router.push("/community"); // Redirect to community after login
             router.refresh();
         }
     }
 
     return (
-        <div className="flex items-center justify-center min-h-[80vh] bg-slate-50">
-            <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-xl border border-slate-100">
-                <div className="text-center mb-8">
-                    <h1 className="text-2xl font-bold text-primary-DEFAULT mb-2">Welcome Back</h1>
-                    <p className="text-text-muted">Sign in to access premium content</p>
+        <div className="flex items-center justify-center min-h-[85vh] bg-background">
+            <div className="w-full max-w-sm p-8 bg-background border border-border shadow-sm">
+                <div className="text-center mb-10">
+                    <h1 className="text-3xl font-serif font-medium text-foreground mb-3">Sign in to LUMIERE</h1>
+                    <p className="text-muted text-sm">Access the community and premium insights</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-2">Email</label>
+                        <label className="block text-xs font-bold uppercase tracking-widest text-muted mb-2">Email</label>
                         <input
                             name="email"
                             type="email"
                             defaultValue="test@example.com"
                             required
-                            className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-primary-DEFAULT focus:ring-1 focus:ring-primary-DEFAULT outline-none transition-all"
+                            className="w-full bg-transparent px-4 py-3 border border-border focus:border-foreground outline-none transition-colors text-sm"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-2">Password</label>
+                        <label className="block text-xs font-bold uppercase tracking-widest text-muted mb-2">Password</label>
                         <input
                             name="password"
                             type="password"
                             defaultValue="password123"
                             required
-                            className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-primary-DEFAULT focus:ring-1 focus:ring-primary-DEFAULT outline-none transition-all"
+                            className="w-full bg-transparent px-4 py-3 border border-border focus:border-foreground outline-none transition-colors text-sm"
                         />
                     </div>
 
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full bg-primary-DEFAULT text-white py-3.5 rounded-xl font-bold hover:bg-primary-soft transition-all disabled:opacity-70 flex items-center justify-center"
+                        className="w-full bg-foreground text-background py-3 font-medium hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
                     >
-                        {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Sign In"}
+                        {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Continue"}
                     </button>
                 </form>
 
-                <div className="mt-6 text-center text-sm text-slate-500">
-                    Don't have an account? <span className="text-accent-rose font-medium cursor-pointer">Sign up</span> (Demo)
+                <div className="mt-8 pt-6 border-t border-border text-center text-xs text-muted">
+                    Test Account: <span className="text-foreground">test@example.com</span> / <span className="text-foreground">password123</span>
                 </div>
             </div>
         </div>

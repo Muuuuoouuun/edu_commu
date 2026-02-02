@@ -20,9 +20,9 @@ export function Navbar() {
                 </Link>
 
                 <nav className="hidden md:flex gap-8 text-sm font-medium text-slate-200">
-                    <Link href="#" className="hover:text-accent-gold transition-colors">Magazine</Link>
-                    <Link href="#" className="hover:text-accent-gold transition-colors">Community</Link>
-                    <Link href="#" className="hover:text-accent-gold transition-colors">Curated</Link>
+                    <Link href="/" className="hover:text-accent-gold transition-colors">매거진</Link>
+                    <Link href="/community" className="hover:text-accent-gold transition-colors">커뮤니티</Link>
+                    <Link href="/curated" className="hover:text-accent-gold transition-colors">큐레이션</Link>
                 </nav>
 
                 <div className="flex items-center gap-4">

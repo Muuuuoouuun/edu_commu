@@ -2,6 +2,7 @@
 
 import { Heart, MessageCircle, Share2, MoreHorizontal, Star } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 interface CommunityCardProps {
@@ -24,77 +25,83 @@ interface CommunityCardProps {
     };
 }
 
-export function CommunityCard({ type, author, content, stats }: CommunityCardProps) {
-    return (
-        <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+export function CommunityCard({ id, type, author, content, stats }: CommunityCardProps & { id?: string }) {
+    const CardContent = (
+        <div className="bg-background border-t border-border pt-8 pb-4 transition-colors hover:bg-muted/5 group cursor-pointer">
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                    <div className="relative w-10 h-10 rounded-full bg-slate-100 overflow-hidden border border-slate-200">
+                    <div className="relative w-8 h-8 rounded-full bg-muted overflow-hidden">
                         {author.avatar ? (
                             <Image src={author.avatar} alt={author.name} fill className="object-cover" />
                         ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-accent-rose/10 text-accent-rose font-bold">
+                            <div className="w-full h-full flex items-center justify-center bg-primary text-foreground font-serif text-xs italic">
                                 {author.name[0]}
                             </div>
                         )}
                     </div>
                     <div>
                         <div className="flex items-center gap-2">
-                            <span className="font-semibold text-sm text-slate-900">{author.name}</span>
+                            <span className="font-semibold text-sm text-foreground">{author.name}</span>
                             {author.badge && (
-                                <span className="text-[10px] items-center px-1.5 py-0.5 rounded-full bg-indigo-50 text-indigo-600 font-medium border border-indigo-100">
+                                <span className="text-[10px] items-center px-1.5 py-0.5 border border-border text-muted font-medium uppercase tracking-widest">
                                     {author.badge}
                                 </span>
                             )}
                         </div>
-                        <p className="text-xs text-slate-400">{stats.time}</p>
+                        <p className="text-[11px] font-bold uppercase tracking-widest text-muted/60">{stats.time}</p>
                     </div>
                 </div>
-                <button className="text-slate-300 hover:text-slate-600">
-                    <MoreHorizontal className="w-5 h-5" />
+                <button className="text-muted hover:text-foreground">
+                    <MoreHorizontal className="w-4 h-4" />
                 </button>
             </div>
 
             {/* Content */}
-            <div className="mb-4">
+            <div className="mb-6">
                 {type === "review" && content.rating && (
-                    <div className="flex items-center gap-1 mb-2 text-accent-gold">
+                    <div className="flex items-center gap-1 mb-3 text-accent-gold">
                         {[...Array(5)].map((_, i) => (
-                            <Star key={i} className={cn("w-4 h-4 fill-current", i < content.rating! ? "" : "text-slate-200 fill-slate-200")} />
+                            <Star key={i} className={cn("w-3 h-3 fill-current", i < content.rating! ? "" : "text-border fill-transparent")} />
                         ))}
                     </div>
                 )}
 
-                {content.title && <h4 className="font-bold text-lg mb-2 text-slate-800">{content.title}</h4>}
+                {content.title && <h4 className="font-serif text-xl font-medium mb-2 text-foreground group-hover:text-primary transition-colors">{content.title}</h4>}
 
-                <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-line mb-4">
+                <p className="text-foreground text-base leading-relaxed whitespace-pre-line mb-4 font-sans line-clamp-3">
                     {content.text}
                 </p>
 
                 {content.image && (
-                    <div className="relative w-full h-[240px] overflow-hidden rounded-xl border border-slate-100 mb-4">
+                    <div className="relative w-full h-[300px] overflow-hidden bg-muted mb-4">
                         <Image src={content.image} alt="Post content" fill className="object-cover" />
                     </div>
                 )}
             </div>
 
             {/* Footer / Actions */}
-            <div className="flex items-center justify-between pt-4 border-t border-slate-50">
-                <div className="flex items-center gap-6">
-                    <button className="flex items-center gap-2 text-slate-400 hover:text-accent-rose transition-colors group">
-                        <Heart className="w-5 h-5 group-hover:fill-current" />
-                        <span className="text-xs font-medium">{stats.likes}</span>
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-8">
+                    <button className="flex items-center gap-2 text-muted hover:text-foreground transition-all group/action">
+                        <Heart className="w-4 h-4 group-hover/action:fill-current" />
+                        <span className="text-xs font-bold uppercase tracking-widest">{stats.likes}</span>
                     </button>
-                    <button className="flex items-center gap-2 text-slate-400 hover:text-primary-soft transition-colors group">
-                        <MessageCircle className="w-5 h-5" />
-                        <span className="text-xs font-medium">{stats.comments}</span>
+                    <button className="flex items-center gap-2 text-muted hover:text-foreground transition-all group/action">
+                        <MessageCircle className="w-4 h-4" />
+                        <span className="text-xs font-bold uppercase tracking-widest">{stats.comments}</span>
                     </button>
                 </div>
-                <button className="text-slate-400 hover:text-slate-600">
-                    <Share2 className="w-5 h-5" />
+                <button className="text-muted hover:text-foreground">
+                    <Share2 className="w-4 h-4" />
                 </button>
             </div>
         </div>
     );
+
+    return id ? (
+        <Link href={`/community/${id}`}>
+            {CardContent}
+        </Link>
+    ) : CardContent;
 }

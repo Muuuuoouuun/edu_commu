@@ -2,6 +2,7 @@
 
 import { NewsCard } from "@/components/ui/NewsCard";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 // Mock Data updated to match the new "Newsroom" feel
 const NEWS_ITEMS = [
@@ -45,18 +46,16 @@ export function BlogSection() {
     return (
         <section className="py-20 container mx-auto px-4 md:px-6">
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
-                <h2 className="text-5xl md:text-6xl font-sans font-light tracking-tight text-text-main">
-                    Newsroom
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6 border-t border-black pt-8">
+                <h2 className="text-4xl md:text-5xl font-serif font-medium tracking-tight text-foreground">
+                    최신 소식
                 </h2>
 
-                <div className="flex items-center gap-3">
-                    <button className="px-6 py-2 bg-primary-DEFAULT text-white text-xs font-bold uppercase tracking-widest rounded-full hover:bg-primary-soft transition-colors">
-                        View All Articles
-                    </button>
-                    <button className="w-10 h-10 bg-accent-gold rounded-full flex items-center justify-center hover:bg-accent-cyan transition-colors">
-                        <ArrowRight className="w-4 h-4 text-primary-DEFAULT" />
-                    </button>
+                <div className="flex items-center gap-4">
+                    <Link href="/blog" className="text-sm font-bold uppercase tracking-widest hover:underline flex items-center gap-2">
+                        전체 보기
+                        <ArrowRight className="w-4 h-4" />
+                    </Link>
                 </div>
             </div>
 

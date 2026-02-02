@@ -1,47 +1,33 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-  }
+@theme {
+  /* Fonts */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-playfair), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+
+  /* Colors - Softer Beige & Warm Tone */
+  --color-background: #f4f1ea;
+  /* Deeper, softer beige */
+  --color-foreground: #2a2824;
+  /* Soft warm charcoal */
+
+  --color-primary: #8c8270;
+  /* Muted taupe */
+  --color-primary-foreground: #f4f1ea;
+
+  --color-muted: #78736b;
+  --color-border: #dcd7cd;
+
+  --color-accent-gold: #b08d55;
 }
 
+/* Utilities */
 @layer base {
   body {
-    /* @apply bg-background text-text-main antialiased; - moved to layout.tsx */
-    font-feature-settings: "rlig" 1, "calt" 1;
-    background:
-      radial-gradient(at 0% 0%, rgba(251, 113, 133, 0.15) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, rgba(34, 211, 238, 0.15) 0px, transparent 50%),
-      #f8fafc;
-    /* Base color */
-    min-height: 100vh;
-  }
-
-  .glass-panel {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-  }
-
-  .glass-card {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    transition: all 0.3s ease;
-  }
-
-  .glass-card:hover {
-    background: rgba(255, 255, 255, 0.85);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-    border-color: rgba(255, 255, 255, 0.8);
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
   }
 
   h1,
@@ -50,27 +36,23 @@
   h4,
   h5,
   h6 {
-    font-weight: 700;
-    letter-spacing: -0.025em;
-    color: #1e1b4b;
+    font-family: var(--font-serif);
+    font-weight: 500;
+    letter-spacing: -0.02em;
   }
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
+/* Custom Components */
+@layer components {
+  .btn-pill {
+    @apply px-5 py-2 rounded-full text-sm font-medium transition-colors;
+  }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
+  .btn-primary {
+    @apply px-5 py-2 rounded-full text-sm font-medium transition-colors bg-foreground text-background hover:opacity-90;
+  }
 
-::-webkit-scrollbar-thumb {
-  background-color: #e2e8f0;
-  border-radius: 9999px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: #cbd5e1;
+  .btn-outline {
+    @apply px-5 py-2 rounded-full text-sm font-medium transition-colors border border-foreground/20 hover:bg-foreground/5;
+  }
 }

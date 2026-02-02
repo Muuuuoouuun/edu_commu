@@ -25,93 +25,58 @@ export function NewsCard({
     className
 }: NewsCardProps) {
     const isHero = variant === "hero";
-    const isDark = variant === "dark";
+
+    // Anthropic Style: Clean, bordered cards. Hero is just larger.
+    // No "Dark" variant usage for now to keep consistency, or map it to dark text on light bg.
 
     return (
         <div className={cn(
-            "group relative overflow-hidden rounded-3xl transition-all duration-300",
-            isHero ? "bg-white flex flex-col md:flex-row h-full" : "",
-            variant === "light" ? "bg-white border-slate-200" : "",
-            isDark ? "bg-primary-DEFAULT text-white border-transparent" : "",
-            "hover:shadow-xl hover:-translate-y-1 border",
-            isHero ? "bg-white border-slate-200" : "", // Hero also needs border
+            "group flex flex-col border-t border-border pt-6 transition-colors hover:border-black/50",
+            isHero ? "md:grid md:grid-cols-2 md:gap-8 md:border-none" : "h-full justify-between",
             className
         )}>
-            {/* Image Section */}
-            {(isHero || (image && variant !== "dark")) && (
+            {/* Image (Optional for standard, required for hero usually but we will handle gracefully) */}
+            {image && (
                 <div className={cn(
-                    "relative overflow-hidden",
-                    isHero ? "w-full md:w-1/2 min-h-[300px] md:min-h-full p-4" : "h-48 w-full"
+                    "relative overflow-hidden bg-muted mb-6",
+                    isHero ? "aspect-[16/9] md:aspect-auto md:h-full rounded-none" : "aspect-[3/2] w-full mb-4"
                 )}>
-                    {isHero ? (
-                        <div className="relative w-full h-full rounded-2xl overflow-hidden">
-                            <Image
-                                src={image || ""}
-                                alt={title}
-                                fill
-                                className="object-cover transition-transform duration-500 group-hover:scale-105"
-                            />
-                        </div>
-                    ) : (
-                        image && (
-                            <Image
-                                src={image}
-                                alt={title}
-                                fill
-                                className="object-cover transition-transform duration-500 group-hover:scale-105"
-                            />
-                        )
-                    )}
+                    <Image
+                        src={image}
+                        alt={title}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
                 </div>
             )}
 
-            {/* Content Section */}
+            {/* Content */}
             <div className={cn(
-                "flex flex-col justify-between p-6 md:p-8 relative",
-                isHero ? "w-full md:w-1/2" : "h-full"
+                "flex flex-col",
+                isHero ? "justify-center" : "flex-1"
             )}>
-                <div>
-                    <div className="flex items-center justify-between mb-6 text-xs font-bold tracking-widest uppercase opacity-70">
-                        <div className="flex items-center gap-2">
-                            <span className={cn("w-2 h-2 rounded-full", isDark ? "bg-accent-gold" : "bg-primary-soft")} />
-                            {category}
-                        </div>
-                        <span>{date}</span>
-                    </div>
-
-                    <h3 className={cn(
-                        "font-bold mb-4 leading-tight group-hover:text-accent-gold transition-colors",
-                        isHero ? "text-3xl md:text-4xl font-serif" : "text-xl",
-                        isDark ? "text-white" : "text-slate-900"
-                    )}>
-                        {title}
-                    </h3>
-
-                    {(isHero || variant === "dark") && excerpt && (
-                        <p className={cn(
-                            "text-sm leading-relaxed mb-6 line-clamp-3",
-                            isDark ? "text-slate-300" : "text-slate-600"
-                        )}>
-                            {excerpt}
-                        </p>
-                    )}
+                <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-muted mb-3">
+                    <span className="text-accent-gold">{category}</span>
+                    <span>•</span>
+                    <span>{date}</span>
                 </div>
 
-                <div className="flex items-end justify-between mt-auto pt-6">
-                    <span className={cn(
-                        "text-xs font-bold uppercase tracking-wider border-b pb-1",
-                        isDark ? "border-white/30 text-white/80" : "border-slate-300 text-slate-500"
-                    )}>
-                        Read Article
-                    </span>
+                <h3 className={cn(
+                    "font-serif font-medium leading-tight mb-3 group-hover:text-black/70 transition-colors",
+                    isHero ? "text-4xl md:text-5xl" : "text-xl"
+                )}>
+                    {title}
+                </h3>
 
-                    {/* Floating Action Button */}
-                    <div className={cn(
-                        "absolute bottom-6 right-6 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300",
-                        "bg-accent-gold text-primary-DEFAULT group-hover:bg-accent-cyan group-hover:scale-110 shadow-lg"
-                    )}>
-                        <ArrowRight className="w-4 h-4 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
-                    </div>
+                {excerpt && (
+                    <p className="text-base leading-relaxed text-muted mb-6">
+                        {excerpt}
+                    </p>
+                )}
+
+                <div className="mt-auto pt-4 flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-foreground group-hover:underline">
+                    Read Article
+                    <ArrowRight className="w-4 h-4" />
                 </div>
             </div>
         </div>
