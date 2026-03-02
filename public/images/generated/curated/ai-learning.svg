@@ -1,0 +1,11 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#ECE8DF"/>
+  <circle cx="980" cy="120" r="220" fill="#D3C3A6" fill-opacity="0.5"/>
+  <circle cx="180" cy="690" r="210" fill="#B9C8D8" fill-opacity="0.45"/>
+  <rect x="120" y="140" width="620" height="420" rx="28" fill="#FAF8F2"/>
+  <rect x="170" y="210" width="260" height="22" rx="11" fill="#C6B79A"/>
+  <rect x="170" y="262" width="430" height="18" rx="9" fill="#D9CDB7"/>
+  <rect x="170" y="302" width="380" height="18" rx="9" fill="#D9CDB7"/>
+  <rect x="170" y="342" width="330" height="18" rx="9" fill="#D9CDB7"/>
+  <text x="170" y="420" fill="#76674F" font-size="40" font-family="Arial" font-weight="700">AI Learning Blueprint</text>
+</svg>

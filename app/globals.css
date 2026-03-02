@@ -2,26 +2,28 @@
 
 @theme {
   /* Fonts */
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Pretendard Variable", "Pretendard", var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-playfair), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 
   /* Colors - Softer Beige & Warm Tone */
   --color-background: #f4f1ea;
-  /* Deeper, softer beige */
   --color-foreground: #2a2824;
-  /* Soft warm charcoal */
-
   --color-primary: #8c8270;
-  /* Muted taupe */
   --color-primary-foreground: #f4f1ea;
-
   --color-muted: #78736b;
   --color-border: #dcd7cd;
-
   --color-accent-gold: #b08d55;
+
+  /* Design Tokens for premium/editorial UI */
+  --color-surface: #f7f6f2;
+  --color-surface-elevated: #ffffffb3;
+  --color-text-strong: #1d1d1f;
+  --color-text-secondary: #66666d;
+  --color-text-tertiary: #8b8b93;
+  --radius-card-xl: 30px;
+  --shadow-card-soft: 0 14px 40px rgba(0, 0, 0, 0.05);
 }
 
-/* Utilities */
 @layer base {
   body {
     background-color: var(--color-background);
@@ -36,13 +38,12 @@
   h4,
   h5,
   h6 {
-    font-family: var(--font-serif);
-    font-weight: 500;
-    letter-spacing: -0.02em;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    letter-spacing: -0.01em;
   }
 }
 
-/* Custom Components */
 @layer components {
   .btn-pill {
     @apply px-5 py-2 rounded-full text-sm font-medium transition-colors;
@@ -54,5 +55,26 @@
 
   .btn-outline {
     @apply px-5 py-2 rounded-full text-sm font-medium transition-colors border border-foreground/20 hover:bg-foreground/5;
+  }
+
+  .content-container {
+    @apply max-w-6xl mx-auto px-6 md:px-10;
+  }
+
+  .surface-card {
+    border-radius: var(--radius-card-xl);
+    background: var(--color-surface-elevated);
+    box-shadow: var(--shadow-card-soft);
+    @apply border border-black/5 overflow-hidden;
+  }
+
+  .editorial-eyebrow {
+    color: var(--color-text-tertiary);
+    @apply text-xs tracking-[0.12em] uppercase;
+  }
+
+  .section-title {
+    color: var(--color-text-strong);
+    @apply text-2xl md:text-3xl font-semibold tracking-[-0.01em];
   }
 }
