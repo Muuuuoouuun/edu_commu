@@ -1,0 +1,9 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#EEF0F4"/>
+  <rect x="90" y="110" width="1020" height="580" rx="34" fill="#FCFCFE"/>
+  <rect x="160" y="170" width="240" height="420" rx="20" fill="#E6ECF5"/>
+  <rect x="450" y="260" width="190" height="330" rx="20" fill="#D5E0EE"/>
+  <rect x="690" y="210" width="190" height="380" rx="20" fill="#C8D8EB"/>
+  <rect x="930" y="320" width="110" height="270" rx="20" fill="#B4CAE3"/>
+  <text x="160" y="130" fill="#5B6575" font-size="38" font-family="Arial" font-weight="700">Data-Driven Strategy</text>
+</svg>

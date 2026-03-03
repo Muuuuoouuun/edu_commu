@@ -1,0 +1,10 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#EEEAE3"/>
+  <rect x="120" y="140" width="960" height="520" rx="28" fill="#F9F7F2"/>
+  <rect x="220" y="220" width="360" height="340" rx="20" fill="#DCD4C6"/>
+  <rect x="620" y="250" width="320" height="290" rx="20" fill="#C6D1DA"/>
+  <circle cx="790" cy="250" r="52" fill="#E3C79A"/>
+  <rect x="300" y="320" width="200" height="18" rx="9" fill="#B8A88E"/>
+  <rect x="300" y="356" width="170" height="18" rx="9" fill="#B8A88E"/>
+  <text x="220" y="120" fill="#6D614F" font-size="38" font-family="Arial" font-weight="700">Premium Study Zone</text>
+</svg>

@@ -6,15 +6,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { AdSlot } from "@/components/ui/AdSlot";
 import { CreatePostModal } from "@/components/community/CreatePostModal";
 import { PenSquare } from "lucide-react";
+import type { Post } from "@/lib/types";
 
 const TABS = ["All", "Questions", "Reviews"];
-
-// MOCK_POSTS removed - fetching from API
 
 export function CommunitySection() {
     const [activeTab, setActiveTab] = useState("All");
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [posts, setPosts] = useState<any[]>([]);
+    const [posts, setPosts] = useState<Post[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const fetchPosts = async () => {
@@ -31,19 +30,18 @@ export function CommunitySection() {
         }
     };
 
-    // Initial fetch
     useEffect(() => {
         fetchPosts();
     }, []);
 
     const handlePostCreated = () => {
-        fetchPosts(); // Refresh list
+        fetchPosts();
         setIsModalOpen(false);
     };
 
     const filteredPosts = activeTab === "All"
         ? posts
-        : posts.filter(post => post.type === activeTab.toLowerCase().slice(0, -1)); // "Questions" -> "question"
+        : posts.filter(post => post.type === activeTab.toLowerCase().slice(0, -1));
 
     return (
         <section className="py-20 bg-background border-t border-border">
@@ -56,8 +54,8 @@ export function CommunitySection() {
             <div className="container mx-auto px-4 md:px-6">
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
                     <div>
-                        <h2 className="text-3xl md:text-4xl font-serif font-medium text-foreground mb-4">커뮤니티</h2>
-                        <p className="text-muted max-w-xl text-lg">함께 성장하고 인사이트를 나누는 공간입니다.</p>
+                        <h2 className="text-3xl md:text-4xl font-serif font-medium text-foreground mb-4">커뮤니티: 자유로운 대화</h2>
+                        <p className="text-muted max-w-xl text-lg">질문, 후기, 학습 고민까지 편하게 나누는 열린 토론 공간입니다.</p>
                     </div>
 
                     <div className="flex items-center gap-4">
@@ -69,7 +67,6 @@ export function CommunitySection() {
                             <span>글쓰기</span>
                         </button>
 
-                        {/* Custom Tab Switcher */}
                         <div className="flex p-1 bg-muted/20 rounded-full">
                             {TABS.map((tab) => (
                                 <button
@@ -94,7 +91,6 @@ export function CommunitySection() {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Main Feed */}
                     <div className="lg:col-span-2 space-y-6">
                         {isLoading ? (
                             <div className="text-center py-20 text-muted">Loading community...</div>
@@ -111,7 +107,6 @@ export function CommunitySection() {
                                     {filteredPosts.map((post, idx) => (
                                         <div key={post.id}>
                                             <CommunityCard {...post} />
-                                            {/* Native Horizontal Scroll Ad inserted after 2nd item */}
                                             {idx === 1 && (
                                                 <div className="my-8 -mx-4 md:-mx-0 overflow-x-auto pb-4 hide-scrollbar">
                                                     <div className="flex gap-4 px-4 md:px-0 w-max">
@@ -140,7 +135,6 @@ export function CommunitySection() {
                         )}
                     </div>
 
-                    {/* Sticky Sidebar / Recommendation */}
                     <div className="hidden lg:block space-y-8">
                         <div className="sticky top-24">
                             <AdSlot
@@ -154,7 +148,6 @@ export function CommunitySection() {
 
                             <div className="bg-white p-6 rounded-2xl border border-border shadow-sm mt-8">
                                 <h3 className="font-bold text-lg mb-4 font-serif">Top Contributors</h3>
-                                {/* Minimal list of avatars */}
                                 <div className="flex -space-x-2">
                                     {[1, 2, 3, 4, 5].map((i) => (
                                         <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-slate-200" />
