@@ -24,4 +24,18 @@ export interface Post {
     author: Author;
     content: PostContent;
     stats: PostStats;
+    likedBy?: string[];
+}
+
+export interface Comment {
+    id: string;
+    postId: string;
+    author: {
+        name: string;
+        avatar?: string;
+    };
+    text: string;
+    time: string;
+    likes: number;
+    createdAt: string;
 }

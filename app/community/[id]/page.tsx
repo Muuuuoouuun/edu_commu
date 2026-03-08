@@ -6,6 +6,7 @@ import { ArrowLeft, Share2, Heart, MessageCircle } from "lucide-react";
 import Image from "next/image";
 import { CommentSection } from "@/components/community/CommentSection";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 interface Post {
     id: string;
@@ -33,6 +34,9 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
     const router = useRouter();
     const [post, setPost] = useState<Post | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [likes, setLikes] = useState(0);
+    const [liked, setLiked] = useState(false);
+    const [isLiking, setIsLiking] = useState(false);
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -41,8 +45,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
                 if (res.ok) {
                     const data = await res.json();
                     setPost(data);
-                } else {
-                    // router.push("/community"); // Redirect if not found (optional)
+                    setLikes(data.stats.likes);
                 }
             } catch (error) {
                 console.error("Failed to fetch post", error);
@@ -53,6 +56,38 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
 
         fetchPost();
     }, [id, router]);
+
+    const handleLike = async () => {
+        if (isLiking) return;
+        setIsLiking(true);
+
+        // Optimistic update
+        const newLiked = !liked;
+        setLiked(newLiked);
+        setLikes((prev) => newLiked ? prev + 1 : prev - 1);
+
+        try {
+            const res = await fetch(`/api/posts/${id}/like`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({}),
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setLikes(data.likes);
+                setLiked(data.liked);
+            } else {
+                // Revert
+                setLiked(liked);
+                setLikes((prev) => newLiked ? prev - 1 : prev + 1);
+            }
+        } catch {
+            setLiked(liked);
+            setLikes((prev) => newLiked ? prev - 1 : prev + 1);
+        } finally {
+            setIsLiking(false);
+        }
+    };
 
     if (isLoading) {
         return <div className="min-h-screen pt-32 text-center text-muted">Loading...</div>;
@@ -124,18 +159,24 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
 
                 {/* Action Bar */}
                 <div className="flex items-center gap-6 mt-12 py-6 border-y border-border">
-                    <button className="flex items-center gap-2 text-muted hover:text-accent-rose transition-colors group">
-                        <Heart className="w-6 h-6 group-hover:fill-current" />
-                        <span className="font-medium">{post.stats.likes} Likes</span>
+                    <button
+                        onClick={handleLike}
+                        className={cn(
+                            "flex items-center gap-2 transition-colors group",
+                            liked ? "text-accent-rose" : "text-muted hover:text-accent-rose"
+                        )}
+                    >
+                        <Heart className={cn("w-6 h-6", liked ? "fill-current" : "group-hover:fill-current")} />
+                        <span className="font-medium">{likes} Likes</span>
                     </button>
-                    <button className="flex items-center gap-2 text-muted hover:text-foreground transition-colors">
+                    <div className="flex items-center gap-2 text-muted">
                         <MessageCircle className="w-6 h-6" />
                         <span className="font-medium">{post.stats.comments} Comments</span>
-                    </button>
+                    </div>
                 </div>
 
                 {/* Comments */}
-                <CommentSection />
+                <CommentSection postId={id} />
             </div>
         </div>
     );
