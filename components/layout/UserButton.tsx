@@ -1,50 +1,48 @@
 "use client";
 
-import { useSession, signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { User, LogOut, Loader2 } from "lucide-react";
-import Image from "next/image";
+import { LogOut } from "lucide-react";
+import { Avatar } from "@/components/ui/Avatar";
+import { Skeleton } from "@/components/ui/Skeleton";
+import { buttonStyles } from "@/components/ui/Button";
 
 export function UserButton() {
     const { data: session, status } = useSession();
 
     if (status === "loading") {
-        return <Loader2 className="w-5 h-5 animate-spin text-slate-400" />;
+        return <Skeleton className="h-9 w-9 rounded-full" />;
     }
 
     if (session?.user) {
+        const name = session.user.name ?? "회원";
+
         return (
-            <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                    <div className="relative w-8 h-8 rounded-full overflow-hidden border border-slate-200">
-                        <Image
-                            src={session.user.image || `https://ui-avatars.com/api/?name=${session.user.name}&background=random`}
-                            alt="User"
-                            fill
-                            className="object-cover"
-                        />
-                    </div>
-                    <span className="text-sm font-medium text-text-main hidden md:block">
-                        {session.user.name}
-                    </span>
-                </div>
+            <div className="flex items-center gap-1.5">
+                <span className="flex items-center gap-2 rounded-full border border-rule bg-paper-raised py-1 pl-1 pr-1 sm:pr-3">
+                    <Avatar
+                        name={name}
+                        src={session.user.image ?? undefined}
+                        size="sm"
+                    />
+                    <span className="hidden text-sm font-semibold sm:block">{name}</span>
+                </span>
                 <button
+                    type="button"
                     onClick={() => signOut()}
-                    className="p-2 hover:bg-black/5 rounded-full transition-colors text-text-muted hover:text-accent-rose"
-                    title="Sign Out"
+                    aria-label="로그아웃"
+                    title="로그아웃"
+                    className="grid h-9 w-9 place-items-center rounded-full text-graphite-soft transition-colors hover:bg-eraser-wash hover:text-eraser"
                 >
-                    <LogOut className="w-4 h-4" />
+                    <LogOut className="h-4 w-4" />
                 </button>
             </div>
         );
     }
 
     return (
-        <Link
-            href="/login"
-            className="p-2 hover:bg-black/5 rounded-full transition-colors hidden md:block text-text-muted hover:text-primary-DEFAULT"
-        >
-            <User className="w-5 h-5" />
+        <Link href="/login" className={buttonStyles({ variant: "outline", size: "sm" })}>
+            로그인
         </Link>
     );
 }

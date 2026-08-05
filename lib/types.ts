@@ -9,6 +9,7 @@ export interface Author {
 export interface PostContent {
     text: string;
     title?: string;
+    image?: string;
     rating?: number;
 }
 

@@ -1,75 +1,72 @@
-"use client";
-
-import Link from "next/link";
-import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Doodle, type DoodleName } from "./Sketch";
 
-interface AdSlotProps {
-    variant?: "native" | "banner" | "sidebar";
+/**
+ * 광고 슬롯. 콘텐츠 카드와 헷갈리지 않도록 점선 테두리 + "광고" 표기를 유지한다.
+ * 커뮤니티 신뢰를 위해 네이티브 광고라도 출처를 흐리지 않는다.
+ */
+export function AdSlot({
+    variant = "inline",
+    title,
+    description,
+    cta = "자세히 보기",
+    href = "#",
+    sponsor,
+    doodle = "note",
+    className,
+}: {
+    variant?: "inline" | "panel";
     title: string;
     description: string;
     cta?: string;
-    image?: string;
+    href?: string;
     sponsor?: string;
+    doodle?: DoodleName;
     className?: string;
-}
+}) {
+    const isPanel = variant === "panel";
 
-export function AdSlot({
-    variant = "native",
-    title,
-    description,
-    cta = "Learn more",
-    image,
-    sponsor = "Sponsored",
-    className,
-}: AdSlotProps) {
-    if (variant === "banner") {
-        return (
-            <div className={cn("relative overflow-hidden rounded-2xl bg-surface border border-accent-gold/20 p-6 md:p-8 my-8 group", className)}>
-                <div className="absolute top-0 right-0 bg-accent-gold/10 text-accent-gold text-[10px] font-bold px-2 py-1 rounded-bl-lg uppercase tracking-wider">
-                    {sponsor}
-                </div>
-                <div className="flex flex-col md:flex-row items-center gap-6 z-10 relative">
-                    {image && (
-                        <div className="relative w-full md:w-1/3 h-48 rounded-xl overflow-hidden bg-slate-200">
-                            <Image src={image} alt={title} fill className="object-cover" />
-                        </div>
-                    )}
-                    <div className="flex-1 text-center md:text-left">
-                        <h3 className="text-xl md:text-2xl font-bold text-primary-DEFAULT mb-2 text-balance">{title}</h3>
-                        <p className="text-text-muted mb-6 leading-relaxed text-balance">{description}</p>
-                        <button className="inline-flex items-center gap-2 bg-primary-DEFAULT text-white px-6 py-3 rounded-full font-medium hover:bg-primary-soft transition-all transform hover:-translate-y-0.5 shadow-lg shadow-primary-DEFAULT/20">
-                            {cta} <ArrowUpRight className="w-4 h-4" />
-                        </button>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    // Native List Style
     return (
-        <div className={cn("group relative flex flex-col md:flex-row gap-6 p-6 rounded-2xl bg-[#F9FAFB] border border-slate-100 hover:border-accent-gold/30 transition-all", className)}>
-            <div className="absolute top-4 right-4 text-[10px] text-slate-400 uppercase tracking-widest font-semibold">
-                {sponsor}
-            </div>
-            {image && (
-                <div className="relative w-full md:w-48 h-32 md:h-auto rounded-xl bg-slate-200 overflow-hidden shrink-0">
-                    <Image src={image} alt={title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
-                </div>
+        <aside
+            aria-label="광고"
+            className={cn(
+                "group relative rounded-[18px] border border-dashed border-rule-strong bg-paper-sunken p-5",
+                isPanel ? "flex flex-col gap-3" : "flex items-start gap-4",
+                className
             )}
-            <div className="flex flex-col justify-center flex-1">
-                <h4 className="text-lg font-bold text-slate-900 group-hover:text-primary-soft transition-colors mb-2">
-                    {title}
-                </h4>
-                <p className="text-sm text-slate-500 line-clamp-2 mb-4 leading-relaxed">
+        >
+            <span className="absolute right-4 top-4 font-[family-name:var(--font-hand)] text-sm leading-none text-graphite-faint">
+                광고
+            </span>
+
+            <div
+                className={cn(
+                    "grid shrink-0 place-items-center rounded-md border border-rule bg-paper-raised",
+                    isPanel ? "h-14 w-14" : "h-16 w-16"
+                )}
+            >
+                <Doodle name={doodle} className="h-8 w-8 text-wood" />
+            </div>
+
+            <div className="min-w-0 flex-1">
+                <h3 className="pr-10 text-base leading-snug">{title}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-graphite-soft">
                     {description}
                 </p>
-                <div className="flex items-center text-sm font-medium text-accent-rose group-hover:text-accent-rose/80 transition-colors">
-                    {cta} <ArrowUpRight className="w-3 h-3 ml-1" />
-                </div>
+                {sponsor && (
+                    <p className="mt-2 text-xs text-graphite-faint">{sponsor} 제공</p>
+                )}
+                <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer sponsored"
+                    className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-lamp-ink hover:underline"
+                >
+                    {cta}
+                    <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+                </a>
             </div>
-        </div>
+        </aside>
     );
 }

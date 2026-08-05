@@ -1,164 +1,191 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { PenLine } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { CommunityCard } from "@/components/ui/CommunityCard";
-import { motion, AnimatePresence } from "framer-motion";
 import { AdSlot } from "@/components/ui/AdSlot";
 import { CreatePostModal } from "@/components/community/CreatePostModal";
-import { PenSquare } from "lucide-react";
-import type { Post } from "@/lib/types";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Button } from "@/components/ui/Button";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { PostSkeleton } from "@/components/ui/Skeleton";
+import { Doodle } from "@/components/ui/Sketch";
+import { cn } from "@/lib/utils";
+import type { Post, PostType } from "@/lib/types";
 
-const TABS = ["All", "Questions", "Reviews"];
+const TABS: { value: "all" | PostType; label: string }[] = [
+    { value: "all", label: "전체" },
+    { value: "question", label: "질문" },
+    { value: "review", label: "후기" },
+];
+
+const TIPS = [
+    "질문할 때 무엇을 이미 해봤는지 적으면 답이 빨리 옵니다.",
+    "후기에는 좋았던 점과 아쉬웠던 점을 같이 남겨주세요.",
+    "누군가의 답변이 도움이 됐다면 공감을 눌러 알려주세요.",
+];
 
 export function CommunitySection() {
-    const [activeTab, setActiveTab] = useState("All");
+    const [activeTab, setActiveTab] = useState<"all" | PostType>("all");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [posts, setPosts] = useState<Post[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const fetchPosts = async () => {
+    const fetchPosts = useCallback(async () => {
         try {
-            const res = await fetch('/api/posts');
-            if (res.ok) {
-                const data = await res.json();
-                setPosts(data);
-            }
+            const res = await fetch("/api/posts");
+            if (res.ok) setPosts(await res.json());
         } catch (error) {
-            console.error("Failed to fetch posts", error);
+            console.error("글 목록을 불러오지 못했습니다", error);
         } finally {
             setIsLoading(false);
         }
-    };
+    }, []);
 
     useEffect(() => {
         fetchPosts();
-    }, []);
+    }, [fetchPosts]);
 
-    const handlePostCreated = () => {
-        fetchPosts();
-        setIsModalOpen(false);
-    };
-
-    const filteredPosts = activeTab === "All"
-        ? posts
-        : posts.filter(post => post.type === activeTab.toLowerCase().slice(0, -1));
+    const filteredPosts =
+        activeTab === "all" ? posts : posts.filter((post) => post.type === activeTab);
 
     return (
-        <section className="py-20 bg-background border-t border-border">
+        <section className="border-t border-rule bg-paper-raised/40 py-16 sm:py-20">
             <CreatePostModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-                onSuccess={handlePostCreated}
+                onSuccess={() => {
+                    fetchPosts();
+                    setIsModalOpen(false);
+                }}
             />
 
-            <div className="container mx-auto px-4 md:px-6">
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-                    <div>
-                        <h2 className="text-3xl md:text-4xl font-serif font-medium text-foreground mb-4">커뮤니티: 자유로운 대화</h2>
-                        <p className="text-muted max-w-xl text-lg">질문, 후기, 학습 고민까지 편하게 나누는 열린 토론 공간입니다.</p>
-                    </div>
+            <div className="container-page">
+                <SectionHeading
+                    eyebrow="편하게 말 걸어도 되는 곳"
+                    title="커뮤니티"
+                    description="정리된 질문이 아니어도 괜찮습니다. 막힌 지점만 적어주셔도 누군가 이어서 이야기해 줄 거예요."
+                    action={
+                        <Button onClick={() => setIsModalOpen(true)}>
+                            <PenLine className="h-4 w-4" aria-hidden="true" />글 쓰기
+                        </Button>
+                    }
+                    className="mb-8"
+                />
 
-                    <div className="flex items-center gap-4">
-                        <button
-                            onClick={() => setIsModalOpen(true)}
-                            className="flex items-center gap-2 px-5 py-2.5 bg-foreground text-background rounded-full font-medium hover:bg-foreground/90 transition-all"
-                        >
-                            <PenSquare className="w-4 h-4" />
-                            <span>글쓰기</span>
-                        </button>
-
-                        <div className="flex p-1 bg-muted/20 rounded-full">
-                            {TABS.map((tab) => (
-                                <button
-                                    key={tab}
-                                    onClick={() => setActiveTab(tab)}
-                                    className="relative px-6 py-2 rounded-full text-sm font-medium transition-colors"
-                                >
-                                    {activeTab === tab && (
-                                        <motion.div
-                                            layoutId="activeTab"
-                                            className="absolute inset-0 bg-white shadow-sm rounded-full"
-                                            transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                                        />
-                                    )}
-                                    <span className={activeTab === tab ? "relative z-10 text-foreground" : "relative z-10 text-muted-foreground hover:text-foreground"}>
-                                        {tab}
-                                    </span>
-                                </button>
-                            ))}
-                        </div>
-                    </div>
+                <div
+                    role="tablist"
+                    aria-label="글 종류"
+                    className="mb-7 inline-flex rounded-full border border-rule bg-paper-sunken p-1"
+                >
+                    {TABS.map((tab) => {
+                        const active = activeTab === tab.value;
+                        return (
+                            <button
+                                key={tab.value}
+                                role="tab"
+                                type="button"
+                                aria-selected={active}
+                                onClick={() => setActiveTab(tab.value)}
+                                className={cn(
+                                    "relative rounded-full px-5 py-1.5 text-sm font-semibold transition-colors",
+                                    active ? "text-lamp-ink" : "text-graphite-faint hover:text-graphite"
+                                )}
+                            >
+                                {active && (
+                                    <motion.span
+                                        layoutId="community-tab"
+                                        aria-hidden="true"
+                                        className="absolute inset-0 rounded-full border border-rule bg-paper-raised shadow-[0_1px_0_var(--rule)]"
+                                        transition={{ type: "spring", bounce: 0.18, duration: 0.5 }}
+                                    />
+                                )}
+                                <span className="relative">{tab.label}</span>
+                            </button>
+                        );
+                    })}
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div className="lg:col-span-2 space-y-6">
+                <div className="grid gap-8 lg:grid-cols-3">
+                    <div className="lg:col-span-2">
                         {isLoading ? (
-                            <div className="text-center py-20 text-muted">Loading community...</div>
+                            <div className="space-y-5">
+                                <PostSkeleton />
+                                <PostSkeleton />
+                                <PostSkeleton />
+                            </div>
+                        ) : filteredPosts.length === 0 ? (
+                            <EmptyState
+                                doodle="pencil"
+                                title="아직 글이 없어요"
+                                description="첫 글을 남겨주시면 이 자리가 채워집니다. 사소한 질문일수록 환영이에요."
+                                action={
+                                    <Button onClick={() => setIsModalOpen(true)} variant="soft">
+                                        첫 글 남기기
+                                    </Button>
+                                }
+                            />
                         ) : (
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     key={activeTab}
-                                    initial={{ opacity: 0, y: 20 }}
+                                    initial={{ opacity: 0, y: 12 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -20 }}
-                                    transition={{ duration: 0.3 }}
-                                    className="space-y-6"
+                                    exit={{ opacity: 0, y: -8 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="space-y-5"
                                 >
-                                    {filteredPosts.map((post, idx) => (
-                                        <div key={post.id}>
+                                    {filteredPosts.map((post, index) => (
+                                        <div key={post.id} className="space-y-5">
                                             <CommunityCard {...post} />
-                                            {idx === 1 && (
-                                                <div className="my-8 -mx-4 md:-mx-0 overflow-x-auto pb-4 hide-scrollbar">
-                                                    <div className="flex gap-4 px-4 md:px-0 w-max">
-                                                        {[1, 2, 3].map((card) => (
-                                                            <div key={card} className="w-72 p-4 bg-white border border-border rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer group">
-                                                                <div className="w-full h-32 bg-secondary/10 rounded-lg mb-3 flex items-center justify-center text-muted">
-                                                                    <span className="text-xs font-bold uppercase tracking-widest">Seminar</span>
-                                                                </div>
-                                                                <h5 className="font-bold text-foreground mb-1 group-hover:text-primary-soft">Design Leadership 101</h5>
-                                                                <p className="text-xs text-muted">Starts Oct 30 • Online</p>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
+                                            {index === 1 && (
+                                                <AdSlot
+                                                    doodle="book"
+                                                    title="여름 방학 집중 특강 모집"
+                                                    description="학년별 취약 단원만 골라 3주 동안 다지는 과정입니다."
+                                                    sponsor="책상서랍 파트너"
+                                                    cta="일정 확인하기"
+                                                />
                                             )}
                                         </div>
                                     ))}
-                                    {filteredPosts.length === 0 && (
-                                        <div className="text-center py-20 bg-muted/10 rounded-2xl border border-dashed border-border">
-                                            <p className="text-muted mb-2">No posts yet.</p>
-                                            <button onClick={() => setIsModalOpen(true)} className="text-foreground font-medium hover:underline">Be the first to share!</button>
-                                        </div>
-                                    )}
                                 </motion.div>
                             </AnimatePresence>
                         )}
                     </div>
 
-                    <div className="hidden lg:block space-y-8">
-                        <div className="sticky top-24">
-                            <AdSlot
-                                title="Premium Membership"
-                                description="Get unlimited access to all courses and exclusive community features."
-                                sponsor="Lumiere Pro"
-                                variant="banner"
-                                cta="Upgrade Now"
-                                className="bg-foreground text-background border-none"
-                            />
-
-                            <div className="bg-white p-6 rounded-2xl border border-border shadow-sm mt-8">
-                                <h3 className="font-bold text-lg mb-4 font-serif">Top Contributors</h3>
-                                <div className="flex -space-x-2">
-                                    {[1, 2, 3, 4, 5].map((i) => (
-                                        <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-slate-200" />
-                                    ))}
-                                    <div className="w-10 h-10 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500">
-                                        +42
-                                    </div>
-                                </div>
+                    <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+                        <div className="paper-card p-5">
+                            <div className="flex items-center gap-2">
+                                <Doodle name="note" className="h-6 w-6 text-plant" />
+                                <h3 className="text-base">이렇게 쓰면 좋아요</h3>
                             </div>
+                            <ul className="mt-4 space-y-3">
+                                {TIPS.map((tip) => (
+                                    <li
+                                        key={tip}
+                                        className="flex gap-2.5 text-sm leading-relaxed text-graphite-soft"
+                                    >
+                                        <span
+                                            aria-hidden="true"
+                                            className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-lamp"
+                                        />
+                                        {tip}
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
-                    </div>
+
+                        <AdSlot
+                            variant="panel"
+                            doodle="lamp"
+                            title="책상 조명 추천 기획전"
+                            description="눈이 덜 피로한 색온도의 스탠드를 모았습니다."
+                            sponsor="책상서랍 파트너"
+                            cta="기획전 보기"
+                        />
+                    </aside>
                 </div>
             </div>
         </section>

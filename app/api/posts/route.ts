@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { getPosts, addPost } from '@/lib/db-mock';
 import { Post } from '@/lib/types';
-import { nanoid } from 'nanoid';
 
 // Simple ID generator fallback if nanoid fails or for simplicity
 const generateId = () => Math.random().toString(36).substring(2, 9);

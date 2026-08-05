@@ -1,122 +1,82 @@
-"use client";
+import type { Metadata } from "next";
+import { ArrowUpRight, Clock } from "lucide-react";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Badge } from "@/components/ui/Badge";
+import { SketchCover } from "@/components/ui/SketchCover";
+import { CURATED_ITEMS } from "@/lib/content";
 
-import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
-import Image from "next/image";
-
-const CURATED_RESOURCES = [
-    {
-        id: 1,
-        title: "AI 시대 학습 설계: 상위 1%의 공부 루틴",
-        category: "Learning Design",
-        type: "Article",
-        author: "LUMIERE Editorial",
-        readTime: "8 min read",
-        image: "/images/generated/curated/ai-learning.svg",
-        summary: "성과를 만드는 학습 루틴을 구조화하는 방법을 실제 사례 중심으로 정리했습니다."
-    },
-    {
-        id: 2,
-        title: "입시 전략의 본질: 데이터로 보는 선택과 집중",
-        category: "Strategy",
-        type: "Insight",
-        author: "Dr. Sarah Kim",
-        readTime: "10 min read",
-        image: "/images/generated/curated/strategy-data.svg",
-        summary: "목표 대학/학과별 전략을 데이터 기반으로 설계하는 프레임워크를 제안합니다."
-    },
-    {
-        id: 3,
-        title: "몰입을 만드는 공간: 집에서 구현하는 프리미엄 스터디존",
-        category: "Lifestyle",
-        type: "Guide",
-        author: "Lumiere Design Lab",
-        readTime: "7 min read",
-        image: "/images/generated/curated/study-zone.svg",
-        summary: "작은 공간에서도 집중력을 끌어올리는 조명, 컬러, 동선 설계 팁을 담았습니다."
-    }
-];
+export const metadata: Metadata = {
+    title: "큐레이션",
+    description: "길게 읽을 만한 글을 골라 모았습니다.",
+};
 
 export default function CuratedPage() {
     return (
-        <div className="min-h-screen bg-[var(--color-surface)] text-[var(--color-text-strong)]">
-            <section className="content-container pt-28 md:pt-36 pb-16 md:pb-24">
-                <motion.p
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="editorial-eyebrow mb-5"
-                >
-                    CURATION JOURNAL
-                </motion.p>
-                <motion.h1
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.05 }}
-                    className="text-4xl md:text-6xl font-semibold leading-[1.1] tracking-[-0.02em] max-w-4xl"
-                >
-                    블로그 스타일의 고급 큐레이션,
-                    <br className="hidden md:block" />
-                    우아하고 절제된 Apple 감성 레이아웃.
-                </motion.h1>
-                <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className="mt-8 text-lg max-w-2xl leading-relaxed text-[var(--color-text-secondary)]"
-                >
-                    긴 글을 천천히 읽고 사고를 확장할 수 있도록, 미니멀한 타이포와 넓은 여백 중심으로 구성했습니다.
-                </motion.p>
-            </section>
+        <>
+            <PageHeader
+                eyebrow="한 편씩 천천히"
+                title="큐레이션"
+                description="짧게 훑기보다 한 편을 끝까지 읽는 편이 남습니다. 여백을 넉넉히 두고 고른 글들입니다."
+                doodle="note"
+            />
 
-            <section className="content-container pb-24 md:pb-32">
-                <div className="grid grid-cols-1 gap-7">
-                    {CURATED_RESOURCES.map((item, index) => (
-                        <motion.article
+            <div className="container-page py-14">
+                <div className="space-y-7">
+                    {CURATED_ITEMS.map((item) => (
+                        <article
                             key={item.id}
-                            initial={{ opacity: 0, y: 24 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.08 }}
-                            className="surface-card group"
+                            className="paper-card paper-card-hover group relative overflow-hidden md:grid md:grid-cols-[1.05fr_1.3fr]"
                         >
-                            <div className="grid md:grid-cols-[1.15fr_1fr]">
-                                <div className="relative min-h-[270px] md:min-h-[340px]">
-                                    <Image
-                                        src={item.image}
-                                        alt={item.title}
-                                        fill
-                                        className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                                    />
+                            <SketchCover
+                                seed={item.id}
+                                doodle={item.doodle}
+                                label={item.category}
+                                className="min-h-56 border-b border-rule md:border-b-0 md:border-r"
+                            />
+
+                            <div className="flex flex-col justify-between p-6 sm:p-9">
+                                <div>
+                                    <div className="flex flex-wrap items-center gap-2">
+                                        <Badge tone="lamp">{item.category}</Badge>
+                                        <Badge tone="neutral">{item.kind}</Badge>
+                                    </div>
+
+                                    <h2 className="mt-4 text-xl leading-snug sm:text-2xl">
+                                        <a
+                                            href={`#${item.id}`}
+                                            className="transition-colors after:absolute after:inset-0 group-hover:text-lamp-ink"
+                                        >
+                                            {item.title}
+                                        </a>
+                                    </h2>
+
+                                    <p className="mt-4 text-[15px] leading-relaxed text-graphite-soft">
+                                        {item.summary}
+                                    </p>
                                 </div>
 
-                                <div className="p-7 md:p-10 flex flex-col justify-between">
-                                    <div>
-                                        <div className="editorial-eyebrow flex items-center gap-3 mb-4">
-                                            <span>{item.category}</span>
-                                            <span>·</span>
-                                            <span>{item.type}</span>
-                                        </div>
-                                        <h2 className="section-title leading-tight">{item.title}</h2>
-                                        <p className="mt-4 text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
-                                            {item.summary}
-                                        </p>
+                                <div className="mt-8 flex items-center justify-between">
+                                    <div className="flex items-center gap-2 text-xs text-graphite-faint">
+                                        <span>{item.author}</span>
+                                        <span aria-hidden="true">·</span>
+                                        <span className="inline-flex items-center gap-1">
+                                            <Clock className="h-3 w-3" aria-hidden="true" />
+                                            {item.readTime}
+                                        </span>
                                     </div>
-
-                                    <div className="mt-8 flex items-center justify-between">
-                                        <div className="text-sm text-[var(--color-text-tertiary)]">
-                                            <p>{item.author}</p>
-                                            <p className="mt-1">{item.readTime}</p>
-                                        </div>
-                                        <button className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-full border border-black/10 hover:border-black/20 hover:bg-black/[0.03] transition-colors">
-                                            읽어보기 <ArrowUpRight className="w-4 h-4" />
-                                        </button>
-                                    </div>
+                                    <span
+                                        aria-hidden="true"
+                                        className="inline-flex items-center gap-1 text-sm font-semibold text-lamp-ink"
+                                    >
+                                        읽어보기
+                                        <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                                    </span>
                                 </div>
                             </div>
-                        </motion.article>
+                        </article>
                     ))}
                 </div>
-            </section>
-        </div>
+            </div>
+        </>
     );
 }
