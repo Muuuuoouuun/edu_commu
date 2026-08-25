@@ -7,20 +7,7 @@ const SIZES = {
     lg: "h-12 w-12 text-base",
 } as const;
 
-/** 이름 기반으로 실내 팔레트 안에서 배경색을 고정 배정 */
-const TINTS = [
-    "bg-lamp-wash text-lamp-ink",
-    "bg-plant-wash text-plant",
-    "bg-eraser-wash text-eraser",
-    "bg-paper-sunken text-wood",
-];
-
-function tintFor(name: string) {
-    let sum = 0;
-    for (let i = 0; i < name.length; i += 1) sum += name.charCodeAt(i);
-    return TINTS[sum % TINTS.length];
-}
-
+/** 색으로 사람을 구분하지 않는다 — 이니셜과 1px 테두리만 쓴다. */
 export function Avatar({
     name,
     src,
@@ -37,19 +24,15 @@ export function Avatar({
     return (
         <span
             className={cn(
-                "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full border border-rule",
+                "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full border border-rule bg-paper-sunken text-graphite-soft",
                 SIZES[size],
-                !src && tintFor(name),
                 className
             )}
         >
             {src ? (
                 <Image src={src} alt="" fill sizes="48px" className="object-cover" />
             ) : (
-                <span
-                    aria-hidden="true"
-                    className="font-[family-name:var(--font-hand)] text-[1.15em] leading-none"
-                >
+                <span aria-hidden="true" className="text-[1.05em] leading-none">
                     {initial}
                 </span>
             )}

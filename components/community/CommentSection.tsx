@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Send, ThumbsUp } from "lucide-react";
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
-import { Doodle } from "@/components/ui/Sketch";
 
 type Comment = {
     id: number;
@@ -56,7 +55,6 @@ export function CommentSection() {
     return (
         <section aria-labelledby="comments-heading">
             <div className="flex items-center gap-2">
-                <Doodle name="pencil" className="h-6 w-6 text-lamp" />
                 <h2 id="comments-heading" className="text-xl">
                     댓글 {comments.length}
                 </h2>
@@ -107,7 +105,7 @@ export function CommentSection() {
                             </p>
                             <button
                                 type="button"
-                                className="mt-2.5 inline-flex items-center gap-1.5 rounded-full text-xs font-semibold text-graphite-faint transition-colors hover:text-lamp-ink"
+                                className="mt-2.5 inline-flex items-center gap-1.5 text-xs text-graphite-faint transition-colors hover:text-accent"
                             >
                                 <ThumbsUp className="h-3 w-3" aria-hidden="true" />
                                 도움돼요 {comment.likes > 0 && comment.likes}

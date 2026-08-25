@@ -2,62 +2,33 @@ import { cn } from "@/lib/utils";
 import { Doodle, type DoodleName } from "./Sketch";
 
 /**
- * 기사/카드 커버를 연필 스케치로 그린다.
- * 외부 이미지에 의존하지 않아 다크모드에서도 톤이 유지되고, 네트워크 요청이 없다.
- * `seed`로 무늬가 결정되므로 같은 글은 항상 같은 커버를 갖는다.
+ * 매거진 카드의 커버.
+ * 이 화면에서 유일하게 남긴 그림 요소라, 색은 쓰지 않고 연필 도안과
+ * 모눈 질감만으로 만든다. 커버끼리는 도안만 다르고 배경은 모두 같다.
  */
-
-const TINTS = [
-    "bg-lamp-wash text-lamp",
-    "bg-plant-wash text-plant",
-    "bg-paper-sunken text-wood",
-    "bg-eraser-wash text-eraser",
-] as const;
-
-const PATTERNS = ["grid-paper", "ruled-lines", "grid-paper", "ruled-lines"] as const;
-
-function hash(seed: string) {
-    let value = 0;
-    for (let i = 0; i < seed.length; i += 1) {
-        value = (value * 31 + seed.charCodeAt(i)) % 100000;
-    }
-    return value;
-}
-
 export function SketchCover({
-    seed,
     doodle = "book",
     label,
     className,
 }: {
-    seed: string;
     doodle?: DoodleName;
-    /** 커버 위에 손글씨로 얹는 짧은 라벨 */
+    /** 커버 위에 손글씨로 얹는 과목 라벨 */
     label?: string;
     className?: string;
 }) {
-    const index = hash(seed);
-    const tint = TINTS[index % TINTS.length];
-    const pattern = PATTERNS[index % PATTERNS.length];
-    const tilt = (index % 5) - 2; // -2deg ~ 2deg
-
     return (
         <div
             aria-hidden="true"
             className={cn(
-                "relative isolate flex items-center justify-center overflow-hidden",
-                tint,
+                "relative isolate flex items-center justify-center overflow-hidden bg-paper-sunken",
                 className
             )}
         >
-            <div className={cn("absolute inset-0 opacity-40", pattern)} />
-            <div
-                className="relative flex flex-col items-center gap-2"
-                style={{ rotate: `${tilt}deg` }}
-            >
-                <Doodle name={doodle} className="h-14 w-14 opacity-80" />
+            <div className="grid-paper absolute inset-0 opacity-60" />
+            <div className="relative flex flex-col items-center gap-2.5">
+                <Doodle name={doodle} className="h-10 w-10 text-graphite/50" />
                 {label && (
-                    <span className="font-[family-name:var(--font-hand)] text-lg leading-none opacity-70">
+                    <span className="font-[family-name:var(--font-hand)] text-lg leading-none text-graphite-soft">
                         {label}
                     </span>
                 )}

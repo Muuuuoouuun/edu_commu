@@ -6,78 +6,63 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ==========================================================================
-   Palette — "밤늦게까지 불 켜둔 공부방"
-   종이 · 연필 · 원목 · 스탠드 조명 · 화분
+   Palette — 흰 종이 위의 잉크
+   색을 거의 쓰지 않는다. 위계는 글자 크기와 회색 단계, 1px 선으로만 만든다.
    ========================================================================== */
 :root {
     color-scheme: light;
 
-    /* Surfaces — 종이 */
-    --paper: #fbf7ef;
-    --paper-raised: #fffcf6;
-    --paper-sunken: #f3ede1;
+    /* Surfaces */
+    --paper: #ffffff;
+    --paper-raised: #ffffff; /* 카드도 흰색 — 테두리로만 구분한다 */
+    --paper-sunken: #faf9f7; /* 입력창·커버처럼 살짝 눌린 면 */
 
-    /* Text — 연필심 */
-    --graphite: #2f2b27;
-    --graphite-soft: #6b6459;
-    --graphite-faint: #8c8474;
+    /* Ink */
+    --graphite: #141414;
+    --graphite-soft: #6e6e6e;
+    --graphite-faint: #9b9b9b;
 
-    /* Lines — 연필선 */
-    --rule: #e6dccb;
-    --rule-strong: #cdbfa6;
+    /* Lines */
+    --rule: #e8e8e8;
+    --rule-strong: #c4c4c4;
 
-    /* Accents — 실내 */
-    --lamp: #c9762e;
-    --lamp-ink: #9c560f; /* 종이 위 텍스트용 (5.3:1) */
-    --lamp-solid: #a85e1c; /* 채운 버튼 배경용 (4.9:1 vs 흰 글씨) */
-    --lamp-on: #fffaf2; /* 채운 버튼 위 글자색 */
-    --lamp-wash: #f6e9d8;
-    --wood: #8a6a4b;
-    --plant: #4f7350;
-    --plant-wash: #e6eee2;
-    --eraser: #b04a44;
-    --eraser-wash: #f7e5e2;
-    --highlighter: #f7e7b0;
+    /* Accent — 단색. 활성 표시·링크·밑줄·진행 바에만 쓴다. */
+    --accent: #141414;
+    --accent-on: #ffffff;
 
-    /* Effects */
-    --grain-opacity: 0.5;
-    --shadow-paper: 0 1px 0 var(--rule), 0 6px 18px -12px rgb(72 55 32 / 0.35);
-    --shadow-lift: 0 1px 0 var(--rule-strong), 0 14px 30px -16px rgb(72 55 32 / 0.45);
+    /* 오류 전달에만 남긴 유일한 유채색 */
+    --danger: #b3261e;
+    --danger-wash: #fceeec;
+
+    --select: #ececec;
 }
 
 .dark {
     color-scheme: dark;
 
-    --paper: #191512;
-    --paper-raised: #221d17;
-    --paper-sunken: #13100c;
+    --paper: #121212;
+    --paper-raised: #1a1a1a;
+    --paper-sunken: #171717;
 
-    --graphite: #efe8db;
-    --graphite-soft: #b2a895;
-    --graphite-faint: #867d6d;
+    --graphite: #ededed;
+    --graphite-soft: #a6a6a6;
+    --graphite-faint: #757575;
 
-    --rule: #342d24;
-    --rule-strong: #4c4337;
+    --rule: #2a2a2a;
+    --rule-strong: #4a4a4a;
 
-    --lamp: #e9a44e;
-    --lamp-ink: #f2b76c;
-    --lamp-solid: #e9a44e;
-    --lamp-on: #1e1710;
-    --lamp-wash: #33261440;
-    --wood: #b98f63;
-    --plant: #8fb088;
-    --plant-wash: #242c2340;
-    --eraser: #e58179;
-    --eraser-wash: #3324214d;
-    --highlighter: #4b3f20;
+    /* 반전 — 액센트는 본문보다 한 단계 더 밝게 두어 구분한다 */
+    --accent: #ffffff;
+    --accent-on: #121212;
 
-    --grain-opacity: 0.28;
-    --shadow-paper: 0 1px 0 var(--rule), 0 6px 18px -12px rgb(0 0 0 / 0.7);
-    --shadow-lift: 0 1px 0 var(--rule-strong), 0 14px 30px -16px rgb(0 0 0 / 0.8);
+    --danger: #f2b8b5;
+    --danger-wash: #2a1a1a;
+
+    --select: #333333;
 }
 
 /* ==========================================================================
-   Theme — exposes tokens as Tailwind utilities (bg-paper, text-graphite, ...)
+   Theme — tokens as Tailwind utilities (bg-paper, text-graphite, ...)
    ========================================================================== */
 @theme inline {
     --color-paper: var(--paper);
@@ -91,29 +76,24 @@
     --color-rule: var(--rule);
     --color-rule-strong: var(--rule-strong);
 
-    --color-lamp: var(--lamp);
-    --color-lamp-ink: var(--lamp-ink);
-    --color-lamp-solid: var(--lamp-solid);
-    --color-lamp-on: var(--lamp-on);
-    --color-lamp-wash: var(--lamp-wash);
-    --color-wood: var(--wood);
-    --color-plant: var(--plant);
-    --color-plant-wash: var(--plant-wash);
-    --color-eraser: var(--eraser);
-    --color-eraser-wash: var(--eraser-wash);
-    --color-highlighter: var(--highlighter);
+    --color-accent: var(--accent);
+    --color-accent-on: var(--accent-on);
+    --color-danger: var(--danger);
+    --color-danger-wash: var(--danger-wash);
 
-    /* Fonts — 손글씨(hand)는 장식 전용, 본문은 sans */
+    /* Fonts
+       본문·UI는 시스템에 설치된 Pretendard → 시스템 한글 폰트로 폴백한다.
+       제목은 Gowun Dodum, 매거진 강조는 Gaegu — 둘 다 layout.tsx에서 링크로 받는다. */
     --font-sans: "Pretendard Variable", "Pretendard", "Apple SD Gothic Neo",
         "Malgun Gothic", ui-sans-serif, system-ui, sans-serif;
-    --font-hand: "Gaegu", "Nanum Pen Script", "Segoe Print",
-        "Apple SD Gothic Neo", cursive;
+    --font-display: "Gowun Dodum", "Apple SD Gothic Neo", ui-serif, serif;
+    --font-hand: "Gaegu", "Nanum Pen Script", "Apple SD Gothic Neo", cursive;
 
-    /* Shape — 친숙한 둥근 형태 */
-    --radius-sm: 0.625rem; /* 10px — 뱃지·작은 칩 */
-    --radius-md: 0.875rem; /* 14px — 입력창·버튼 박스 */
-    --radius-lg: 1.125rem; /* 18px — 카드 */
-    --radius-xl: 1.5rem; /*  24px — 큰 패널 */
+    /* Shape — 각진 형태가 기본. 아바타·토글만 rounded-full로 따로 둥글린다. */
+    --radius-sm: 0;
+    --radius-md: 0;
+    --radius-lg: 0;
+    --radius-xl: 0;
 }
 
 /* ==========================================================================
@@ -134,16 +114,21 @@
         font-family: var(--font-sans);
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
+        /* 한글은 어절 단위로 끊는다 — 없으면 낱말 중간에서 줄이 바뀐다 */
+        word-break: keep-all;
+        overflow-wrap: break-word;
     }
 
+    /* 제목은 굵기가 아니라 크기와 서체로 구분한다 (Gowun Dodum은 400 한 종류뿐) */
     h1,
     h2,
     h3,
     h4,
     h5,
     h6 {
-        font-weight: 700;
-        letter-spacing: -0.02em;
+        font-family: var(--font-display);
+        font-weight: 400;
+        letter-spacing: 0.005em;
         text-wrap: balance;
     }
 
@@ -151,15 +136,13 @@
         text-wrap: pretty;
     }
 
-    /* 키보드 포커스는 항상 보이게 — 스탠드 불빛 링 */
     :focus-visible {
-        outline: 2px solid var(--lamp);
+        outline: 2px solid var(--accent);
         outline-offset: 2px;
-        border-radius: 4px;
     }
 
     ::selection {
-        background: var(--highlighter);
+        background: var(--select);
         color: var(--graphite);
     }
 
@@ -178,127 +161,58 @@
             animation-duration: 0.01ms !important;
             animation-iteration-count: 1 !important;
             transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
         }
     }
 }
 
 /* ==========================================================================
-   Components — 연필/종이 시그니처
+   Components
    ========================================================================== */
 @layer components {
     .container-page {
-        @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+        @apply mx-auto w-full max-w-6xl px-6 sm:px-10;
     }
 
     .container-read {
-        @apply mx-auto w-full max-w-3xl px-5 sm:px-8;
+        @apply mx-auto w-full max-w-3xl px-6 sm:px-10;
     }
 
-    /* 종이 카드 — 살짝 겹쳐 놓은 노트처럼 */
+    /* 카드 — 채움도 그림자도 없이 1px 실선으로만 잡는다 */
     .paper-card {
         background-color: var(--paper-raised);
         border: 1px solid var(--rule);
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow-paper);
-        transition: box-shadow 200ms ease-out, border-color 200ms ease-out,
-            transform 200ms ease-out;
+        transition: border-color 200ms ease-out;
     }
 
     .paper-card-hover:hover {
-        box-shadow: var(--shadow-lift);
         border-color: var(--rule-strong);
-        transform: translateY(-2px);
     }
 
-    /* 손으로 그린 듯 비대칭한 테두리 */
-    .sketch-frame {
-        border: 1.5px solid var(--rule-strong);
-        border-radius: 255px 14px 225px 15px / 15px 225px 15px 255px;
+    /* 목록의 첫 행 위에 긋는 진한 선 — 섹션의 시작을 알린다 */
+    .rule-lead {
+        border-top: 1px solid var(--graphite);
     }
 
-    .sketch-frame-alt {
-        border: 1.5px solid var(--rule-strong);
-        border-radius: 15px 225px 15px 255px / 255px 14px 225px 15px;
+    /* 섹션 눈썹 — 자간을 넓힌 작은 라벨 */
+    .eyebrow {
+        @apply text-xs;
+        letter-spacing: 0.08em;
+        color: var(--graphite-faint);
     }
 
-    /* 미세한 종이 결 (노이즈) */
-    .paper-grain {
-        position: relative;
-        isolation: isolate;
+    /* 연필 손글씨 라벨 — 매거진 섹션에서만 쓴다 */
+    .hand-label {
+        font-family: var(--font-hand);
+        color: var(--graphite-soft);
+        @apply text-lg leading-none;
     }
 
-    .paper-grain::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        z-index: -1;
-        pointer-events: none;
-        opacity: var(--grain-opacity);
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
-    }
-
-    /* 공책 괘선 */
-    .ruled-lines {
-        background-image: repeating-linear-gradient(
-            to bottom,
-            transparent,
-            transparent 31px,
-            var(--rule) 31px,
-            var(--rule) 32px
-        );
-    }
-
-    /* 모눈 종이 */
+    /* 모눈 종이 — 매거진 커버의 유일한 질감 */
     .grid-paper {
         background-image: linear-gradient(var(--rule) 1px, transparent 1px),
             linear-gradient(90deg, var(--rule) 1px, transparent 1px);
         background-size: 26px 26px;
-    }
-
-    /* 형광펜 밑줄 */
-    .highlight-mark {
-        background-image: linear-gradient(
-            to top,
-            var(--highlighter) 0,
-            var(--highlighter) 0.42em,
-            transparent 0.42em
-        );
-        padding-inline: 0.1em;
-    }
-
-    /* 마스킹 테이프 */
-    .tape {
-        position: relative;
-    }
-
-    .tape::before {
-        content: "";
-        position: absolute;
-        top: -0.6rem;
-        left: 50%;
-        width: 5.5rem;
-        height: 1.35rem;
-        translate: -50% 0;
-        rotate: -2.5deg;
-        background: color-mix(in srgb, var(--highlighter) 80%, transparent);
-        border-left: 1px dashed color-mix(in srgb, var(--wood) 35%, transparent);
-        border-right: 1px dashed color-mix(in srgb, var(--wood) 35%, transparent);
-    }
-
-    /* 연필로 쓴 라벨 */
-    .hand-label {
-        font-family: var(--font-hand);
-        color: var(--graphite-faint);
-        @apply text-base leading-none;
-    }
-
-    /* 스탠드 불빛 — 히어로 배경 글로우 */
-    .lamp-glow {
-        background: radial-gradient(
-            60% 55% at 78% 8%,
-            color-mix(in srgb, var(--lamp) 26%, transparent) 0%,
-            transparent 70%
-        );
     }
 }
 

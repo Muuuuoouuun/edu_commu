@@ -1,27 +1,30 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-type Variant = "primary" | "outline" | "soft" | "ghost";
+type Variant = "primary" | "outline" | "quiet" | "ghost";
 type Size = "sm" | "md" | "lg";
 
+/**
+ * 각진 형태가 기본이다. 채움은 잉크 한 색뿐이고, 나머지는 1px 선으로만 구분한다.
+ */
 const BASE =
-    "inline-flex items-center justify-center gap-2 rounded-full font-semibold whitespace-nowrap " +
-    "transition-[background-color,color,border-color,box-shadow,transform] duration-200 " +
-    "active:translate-y-px disabled:pointer-events-none disabled:opacity-50";
+    "inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium " +
+    "transition-[background-color,color,border-color] duration-200 " +
+    "disabled:pointer-events-none disabled:opacity-40";
 
 const VARIANTS: Record<Variant, string> = {
-    primary:
-        "bg-lamp-solid text-lamp-on shadow-[0_1px_0_var(--rule-strong)] hover:brightness-110",
+    primary: "bg-accent text-accent-on hover:opacity-85",
     outline:
-        "border border-rule-strong bg-paper-raised text-graphite hover:bg-lamp-wash hover:border-lamp",
-    soft: "bg-lamp-wash text-lamp-ink hover:brightness-[0.97]",
-    ghost: "text-graphite-soft hover:bg-paper-sunken hover:text-graphite",
+        "border border-graphite bg-paper text-graphite hover:bg-paper-sunken",
+    quiet:
+        "border border-rule bg-paper text-graphite-soft hover:border-rule-strong hover:text-graphite",
+    ghost: "text-graphite-soft hover:text-graphite",
 };
 
 const SIZES: Record<Size, string> = {
     sm: "h-8 px-3.5 text-[13px]",
     md: "h-10 px-5 text-sm",
-    lg: "h-12 px-7 text-base",
+    lg: "h-12 px-7 text-[15px]",
 };
 
 export function buttonStyles({
@@ -66,6 +69,25 @@ export function ButtonLink({
     return <Link {...props} className={buttonStyles({ variant, size, className })} />;
 }
 
+/**
+ * 텍스트 링크 — C안의 기본 행동 유도 방식.
+ * 버튼 대신 밑줄 그은 한 줄로 다음 행동을 가리킨다.
+ */
+export function TextLink({
+    className,
+    ...props
+}: React.ComponentProps<typeof Link>) {
+    return (
+        <Link
+            {...props}
+            className={cn(
+                "inline-block border-b border-accent pb-1 text-[15px] font-medium text-accent transition-opacity hover:opacity-60",
+                className
+            )}
+        />
+    );
+}
+
 /** 아이콘만 있는 버튼 — `label`이 곧 aria-label이라 접근성 누락을 막는다. */
 export function IconButton({
     label,
@@ -78,12 +100,7 @@ export function IconButton({
             {...props}
             aria-label={label}
             title={label}
-            className={cn(
-                BASE,
-                VARIANTS[variant],
-                "h-9 w-9 shrink-0 p-0",
-                className
-            )}
+            className={cn(BASE, VARIANTS[variant], "h-9 w-9 shrink-0 p-0", className)}
         />
     );
 }

@@ -13,7 +13,7 @@ export function PencilUnderline({ className }: { className?: string }) {
             aria-hidden="true"
             viewBox="0 0 240 12"
             preserveAspectRatio="none"
-            className={cn("h-2.5 w-full text-lamp", className)}
+            className={cn("h-2.5 w-full text-accent", className)}
         >
             <path
                 d="M2 8.2c26-4.4 52-5.6 78-3.6 26 2 52 5 78 3.2 26-1.8 52-5.4 80-6.4"
@@ -61,7 +61,7 @@ export function SketchCircle({ className }: { className?: string }) {
             aria-hidden="true"
             viewBox="0 0 200 60"
             preserveAspectRatio="none"
-            className={cn("absolute inset-0 h-full w-full text-lamp", className)}
+            className={cn("absolute inset-0 h-full w-full text-accent", className)}
         >
             <path
                 d="M100 4C46 4 8 16 8 30s38 26 92 26 92-12 92-26S154 4 100 4"
@@ -132,7 +132,7 @@ export function Doodle({
         <svg
             aria-hidden="true"
             viewBox="0 0 64 64"
-            className={cn("h-10 w-10 text-lamp", className)}
+            className={cn("h-10 w-10 text-accent", className)}
             fill="none"
             stroke="currentColor"
             strokeWidth="2.2"

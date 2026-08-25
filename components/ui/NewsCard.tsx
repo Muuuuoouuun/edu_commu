@@ -1,16 +1,9 @@
 import Link from "next/link";
-import { ArrowRight, Clock } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Badge } from "./Badge";
 import { SketchCover } from "./SketchCover";
+import { cn } from "@/lib/utils";
 import type { Article } from "@/lib/content";
 
-type Props = Article & {
-    /** 첫 화면 대표 기사 — 가로로 넓게 펼친다 */
-    featured?: boolean;
-    className?: string;
-};
-
+/** 매거진 카드 — 캐러셀과 목록에서 같은 모양을 쓴다. */
 export function NewsCard({
     id,
     title,
@@ -20,80 +13,33 @@ export function NewsCard({
     readTime,
     author,
     doodle,
-    featured = false,
     className,
-}: Props) {
+}: Article & { className?: string }) {
     return (
         <article
             className={cn(
-                "paper-card paper-card-hover group relative overflow-hidden",
-                featured ? "sm:grid sm:grid-cols-2" : "flex h-full flex-col",
+                "group relative flex flex-col border border-rule transition-colors hover:border-rule-strong",
                 className
             )}
         >
             <SketchCover
-                seed={id}
                 doodle={doodle}
                 label={category}
-                className={cn(
-                    "border-b border-rule",
-                    featured
-                        ? "min-h-52 sm:min-h-full sm:border-b-0 sm:border-r"
-                        : "h-40"
-                )}
+                className="h-[150px] border-b border-rule"
             />
-
-            <div
-                className={cn(
-                    "flex flex-1 flex-col p-5",
-                    featured && "justify-center sm:p-8"
-                )}
-            >
-                <div className="mb-3 flex flex-wrap items-center gap-2">
-                    <Badge tone="lamp">{category}</Badge>
-                    <span className="text-xs text-graphite-faint">{date}</span>
-                </div>
-
-                <h3
-                    className={cn(
-                        "leading-snug",
-                        featured ? "text-2xl sm:text-3xl" : "text-lg"
-                    )}
-                >
-                    <Link
-                        href={`/blog/${id}`}
-                        className="transition-colors after:absolute after:inset-0 group-hover:text-lamp-ink"
-                    >
+            <div className="flex flex-1 flex-col p-6">
+                <p className="text-xs text-graphite-faint">{date}</p>
+                <h3 className="mt-3 text-xl leading-[1.5]">
+                    <Link href={`/blog/${id}`} className="after:absolute after:inset-0">
                         {title}
                     </Link>
                 </h3>
-
-                <p
-                    className={cn(
-                        "mt-3 leading-relaxed text-graphite-soft",
-                        featured ? "text-[15px]" : "line-clamp-3 text-sm"
-                    )}
-                >
+                <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-graphite-soft">
                     {excerpt}
                 </p>
-
-                <div className="mt-auto flex items-center justify-between pt-6">
-                    <div className="flex items-center gap-2 text-xs text-graphite-faint">
-                        <span>{author}</span>
-                        <span aria-hidden="true">·</span>
-                        <span className="inline-flex items-center gap-1">
-                            <Clock className="h-3 w-3" aria-hidden="true" />
-                            {readTime}
-                        </span>
-                    </div>
-                    <span
-                        aria-hidden="true"
-                        className="inline-flex items-center gap-1 text-sm font-semibold text-lamp-ink"
-                    >
-                        읽기
-                        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-                    </span>
-                </div>
+                <p className="mt-auto pt-6 text-[13px] text-graphite-faint">
+                    {author} · {readTime}
+                </p>
             </div>
         </article>
     );

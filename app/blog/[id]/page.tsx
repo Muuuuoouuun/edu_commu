@@ -4,8 +4,6 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Clock } from "lucide-react";
 import { ARTICLES, getArticle } from "@/lib/content";
 import { Badge } from "@/components/ui/Badge";
-import { SketchCover, } from "@/components/ui/SketchCover";
-import { SketchDivider } from "@/components/ui/Sketch";
 import { NewsCard } from "@/components/ui/NewsCard";
 
 export function generateStaticParams() {
@@ -40,7 +38,7 @@ export default async function ArticlePage({
             <div className="container-read pt-10">
                 <Link
                     href="/blog"
-                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-graphite-soft transition-colors hover:text-lamp-ink"
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-graphite-soft transition-colors hover:text-accent"
                 >
                     <ArrowLeft className="h-4 w-4" aria-hidden="true" />
                     매거진으로 돌아가기
@@ -48,7 +46,7 @@ export default async function ArticlePage({
 
                 <header className="mt-8">
                     <div className="flex flex-wrap items-center gap-2">
-                        <Badge tone="lamp">{article.category}</Badge>
+                        <Badge tone="accent">{article.category}</Badge>
                         <span className="text-xs text-graphite-faint">{article.date}</span>
                     </div>
 
@@ -70,13 +68,6 @@ export default async function ArticlePage({
                     </div>
                 </header>
 
-                <SketchCover
-                    seed={article.id}
-                    doodle={article.doodle}
-                    label={article.category}
-                    className="mt-8 h-56 rounded-[18px] border border-rule sm:h-72"
-                />
-
                 <div className="mt-10 space-y-6">
                     {article.body.map((block) =>
                         block.startsWith("## ") ? (
@@ -97,7 +88,7 @@ export default async function ArticlePage({
                     )}
                 </div>
 
-                <SketchDivider className="my-14" />
+                <div className="my-14 border-t border-rule" />
 
                 <h2 className="mb-6 text-xl">이어서 읽어보세요</h2>
             </div>

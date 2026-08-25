@@ -4,26 +4,23 @@ export function Skeleton({ className }: { className?: string }) {
     return (
         <div
             aria-hidden="true"
-            className={cn("animate-pulse rounded-md bg-paper-sunken", className)}
+            className={cn("animate-pulse bg-paper-sunken", className)}
         />
     );
 }
 
-/** 커뮤니티 글 카드 로딩 자리표시 */
-export function PostSkeleton() {
+/** 커뮤니티 목록 행의 로딩 자리표시 */
+export function RowSkeleton() {
     return (
-        <div className="paper-card p-5">
-            <div className="flex items-center gap-3">
-                <Skeleton className="h-10 w-10 rounded-full" />
-                <div className="flex-1 space-y-2">
-                    <Skeleton className="h-3.5 w-28" />
-                    <Skeleton className="h-3 w-16" />
-                </div>
+        <div className="flex items-baseline gap-10 border-b border-rule py-7">
+            <Skeleton className="h-3.5 w-10 shrink-0" />
+            <div className="flex-1 space-y-3">
+                <Skeleton className="h-5 w-2/3" />
+                <Skeleton className="h-3.5 w-full max-w-lg" />
             </div>
-            <div className="mt-5 space-y-2.5">
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-3.5 w-full" />
-                <Skeleton className="h-3.5 w-5/6" />
+            <div className="hidden w-40 shrink-0 space-y-2 sm:block">
+                <Skeleton className="ml-auto h-3.5 w-16" />
+                <Skeleton className="ml-auto h-3.5 w-24" />
             </div>
         </div>
     );

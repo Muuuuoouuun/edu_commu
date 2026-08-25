@@ -1,110 +1,79 @@
 import Link from "next/link";
-import Image from "next/image";
-import { Heart, MessageCircle, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Avatar } from "./Avatar";
-import { Badge } from "./Badge";
 import type { Post } from "@/lib/types";
 
-function Rating({ value }: { value: number }) {
-    return (
-        <div className="flex items-center gap-0.5" aria-label={`5점 만점에 ${value}점`}>
-            {Array.from({ length: 5 }, (_, i) => (
-                <Star
-                    key={i}
-                    aria-hidden="true"
-                    className={cn(
-                        "h-3.5 w-3.5",
-                        i < value ? "fill-lamp text-lamp" : "text-rule-strong"
-                    )}
-                />
-            ))}
-        </div>
-    );
-}
-
-export function CommunityCard({ id, type, author, content, stats }: Post) {
+/**
+ * 커뮤니티 글 한 줄.
+ * 카드가 아니라 목록 행이다 — 왼쪽에 분류, 가운데 제목과 본문, 오른쪽에 작성자와 반응.
+ * 행끼리는 1px 선으로만 나뉜다.
+ */
+export function CommunityCard({
+    id,
+    type,
+    author,
+    content,
+    stats,
+    lead = false,
+}: Post & { /** 목록의 첫 행이면 위에 진한 선을 긋는다 */ lead?: boolean }) {
     const isReview = type === "review";
 
     return (
-        <article className="paper-card paper-card-hover group relative p-5">
-            <header className="flex items-center gap-3">
-                <Avatar name={author.name} src={author.avatar} size="md" />
-                <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-1.5">
-                        <span className="text-sm font-bold">{author.name}</span>
-                        {author.badge && (
-                            <Badge tone="wood" hand>
-                                {author.badge}
-                            </Badge>
-                        )}
-                    </div>
-                    <p className="mt-0.5 text-xs text-graphite-faint">{stats.time}</p>
-                </div>
-                <Badge tone={isReview ? "plant" : "lamp"}>
+        <article
+            className={cn(
+                "group relative flex flex-col gap-4 border-b border-rule py-7 sm:flex-row sm:items-baseline sm:gap-10",
+                lead ? "rule-lead" : "border-t-0"
+            )}
+        >
+            <div className="shrink-0 sm:w-10">
+                <span className="text-[13px] text-graphite-faint">
                     {isReview ? "후기" : "질문"}
-                </Badge>
-            </header>
+                </span>
+            </div>
 
-            <div className="mt-4">
+            <div className="min-w-0 flex-1">
                 {isReview && typeof content.rating === "number" && (
-                    <div className="mb-2.5">
-                        <Rating value={content.rating} />
+                    <div
+                        className="mb-2 flex items-center gap-0.5"
+                        aria-label={`5점 만점에 ${content.rating}점`}
+                    >
+                        {Array.from({ length: 5 }, (_, i) => (
+                            <Star
+                                key={i}
+                                aria-hidden="true"
+                                className={cn(
+                                    "h-3 w-3",
+                                    i < content.rating!
+                                        ? "fill-graphite text-graphite"
+                                        : "text-rule-strong"
+                                )}
+                            />
+                        ))}
                     </div>
                 )}
+
+                <h3 className="line-clamp-2 text-[22px] leading-[1.5]">
+                    <Link
+                        href={`/community/${id}`}
+                        className="transition-opacity after:absolute after:inset-0 group-hover:opacity-60"
+                    >
+                        {content.title ?? content.text.split("\n")[0]}
+                    </Link>
+                </h3>
 
                 {content.title && (
-                    <h3 className="text-lg leading-snug">
-                        <Link
-                            href={`/community/${id}`}
-                            className="transition-colors after:absolute after:inset-0 group-hover:text-lamp-ink"
-                        >
-                            {content.title}
-                        </Link>
-                    </h3>
-                )}
-
-                <p
-                    className={cn(
-                        "whitespace-pre-line text-[15px] leading-relaxed text-graphite-soft",
-                        content.title ? "mt-2 line-clamp-2" : "line-clamp-3"
-                    )}
-                >
-                    {!content.title && (
-                        <Link
-                            href={`/community/${id}`}
-                            className="after:absolute after:inset-0"
-                        >
-                            <span className="sr-only">글 자세히 보기: </span>
-                        </Link>
-                    )}
-                    {content.text}
-                </p>
-
-                {content.image && (
-                    <div className="relative mt-4 aspect-[16/9] overflow-hidden rounded-md border border-rule bg-paper-sunken">
-                        <Image
-                            src={content.image}
-                            alt=""
-                            fill
-                            sizes="(min-width: 1024px) 640px, 100vw"
-                            className="object-cover"
-                        />
-                    </div>
+                    <p className="mt-2 line-clamp-2 max-w-2xl text-sm leading-[1.8] text-graphite-soft">
+                        {content.text}
+                    </p>
                 )}
             </div>
 
-            {/* 링크 안에 버튼을 넣지 않기 위해 통계는 표시 전용 텍스트로 둔다 */}
-            <footer className="mt-5 flex items-center gap-5 border-t border-rule pt-4 text-xs text-graphite-faint">
-                <span className="inline-flex items-center gap-1.5">
-                    <Heart className="h-3.5 w-3.5" aria-hidden="true" />
-                    공감 {stats.likes}
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                    <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" />
-                    댓글 {stats.comments}
-                </span>
-            </footer>
+            <div className="shrink-0 text-left sm:w-40 sm:text-right">
+                <p className="text-[13px]">{author.name}</p>
+                <p className="mt-1.5 text-[13px] text-graphite-faint">
+                    공감 {stats.likes} · 댓글 {stats.comments}
+                </p>
+            </div>
         </article>
     );
 }

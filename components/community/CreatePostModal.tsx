@@ -118,14 +118,14 @@ export function CreatePostModal({
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 12, scale: 0.98 }}
                         transition={{ duration: 0.2 }}
-                        className="fixed left-1/2 top-1/2 z-[70] max-h-[90vh] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-[18px] border border-rule bg-paper-raised p-6 shadow-[var(--shadow-lift)] sm:p-8"
+                        className="fixed left-1/2 top-1/2 z-[70] max-h-[90vh] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-y-auto border border-rule bg-paper-raised p-6 sm:p-8"
                     >
                         <div className="flex items-start justify-between gap-4">
                             <div>
                                 <h2 id="create-post-title" className="text-xl">
                                     글 쓰기
                                 </h2>
-                                <p className="hand-label mt-2">{activeHint}</p>
+                                <p className="mt-2 text-sm text-graphite-soft">{activeHint}</p>
                             </div>
                             <IconButton label="닫기" onClick={onClose}>
                                 <X className="h-4 w-4" />
@@ -145,9 +145,9 @@ export function CreatePostModal({
                                                 aria-pressed={active}
                                                 onClick={() => setActiveType(type.value)}
                                                 className={cn(
-                                                    "flex-1 rounded-full border py-2 text-sm font-semibold transition-colors",
+                                                    "flex-1 border py-2 text-sm transition-colors",
                                                     active
-                                                        ? "border-lamp bg-lamp-wash text-lamp-ink"
+                                                        ? "border-accent bg-paper-sunken text-accent"
                                                         : "border-rule text-graphite-faint hover:text-graphite"
                                                 )}
                                             >
@@ -178,7 +178,7 @@ export function CreatePostModal({
                                                 ? "어디서 막히셨나요?"
                                                 : "무엇에 대한 후기인가요?"
                                         }
-                                        className="w-full rounded-[14px] border border-rule bg-paper-sunken px-4 py-3 text-sm transition-colors focus:border-lamp"
+                                        className="w-full border border-rule bg-paper-sunken px-4 py-3 text-sm transition-colors focus:border-accent"
                                     />
                                 </div>
 
@@ -195,7 +195,7 @@ export function CreatePostModal({
                                         required
                                         rows={7}
                                         placeholder="다듬지 않아도 괜찮아요. 떠오르는 대로 적어주세요."
-                                        className="w-full resize-none rounded-[14px] border border-rule bg-paper-sunken px-4 py-3 text-sm leading-relaxed transition-colors focus:border-lamp"
+                                        className="w-full resize-none border border-rule bg-paper-sunken px-4 py-3 text-sm leading-relaxed transition-colors focus:border-accent"
                                     />
                                 </div>
                             </div>
@@ -203,7 +203,7 @@ export function CreatePostModal({
                             {error && (
                                 <p
                                     role="alert"
-                                    className="mt-5 flex items-start gap-2 rounded-[14px] border border-eraser/30 bg-eraser-wash px-4 py-3 text-sm text-eraser"
+                                    className="mt-5 flex items-start gap-2 border border-danger/30 bg-danger-wash px-4 py-3 text-sm text-danger"
                                 >
                                     <AlertCircle
                                         className="mt-0.5 h-4 w-4 shrink-0"
@@ -214,7 +214,7 @@ export function CreatePostModal({
                             )}
 
                             {!session && (
-                                <p className="mt-5 rounded-[14px] border border-dashed border-rule-strong px-4 py-3 text-sm text-graphite-soft">
+                                <p className="mt-5 border border-dashed border-rule-strong px-4 py-3 text-sm text-graphite-soft">
                                     글을 올리려면 로그인이 필요해요. 등록을 누르면
                                     로그인 화면으로 이동합니다.
                                 </p>

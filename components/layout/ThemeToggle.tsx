@@ -76,7 +76,7 @@ export function ThemeToggle({ className }: { className?: string }) {
             role="group"
             aria-label="화면 테마"
             className={cn(
-                "flex items-center gap-0.5 rounded-full border border-rule bg-paper-sunken p-0.5",
+                "flex items-center border border-rule",
                 className
             )}
         >
@@ -91,13 +91,13 @@ export function ThemeToggle({ className }: { className?: string }) {
                         title={label}
                         aria-pressed={active}
                         className={cn(
-                            "grid h-7 w-7 place-items-center rounded-full transition-colors",
+                            "grid h-7 w-7 place-items-center transition-colors",
                             active
-                                ? "bg-paper-raised text-lamp-ink shadow-[0_1px_0_var(--rule)]"
+                                ? "bg-accent text-accent-on"
                                 : "text-graphite-faint hover:text-graphite"
                         )}
                     >
-                        <Icon className="h-3.5 w-3.5" strokeWidth={2.2} />
+                        <Icon className="h-3.5 w-3.5" strokeWidth={1.8} />
                     </button>
                 );
             })}

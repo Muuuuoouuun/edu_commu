@@ -22,7 +22,7 @@ export function Prose({
                 "[&_ul]:my-4 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-5",
                 "[&_ol]:my-4 [&_ol]:list-decimal [&_ol]:space-y-2 [&_ol]:pl-5",
                 "[&_strong]:font-semibold [&_strong]:text-graphite",
-                "[&_a]:font-semibold [&_a]:text-lamp-ink hover:[&_a]:underline",
+                "[&_a]:font-semibold [&_a]:text-accent hover:[&_a]:underline",
                 className
             )}
         >

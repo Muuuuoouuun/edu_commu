@@ -1,13 +1,14 @@
 import { cn } from "@/lib/utils";
 
-type Tone = "lamp" | "plant" | "wood" | "eraser" | "neutral";
+/**
+ * 색으로 구분하지 않는다.
+ * 질문/후기 같은 분류는 잉크 한 색과 1px 테두리, 또는 회색 텍스트로만 나타낸다.
+ */
+type Tone = "accent" | "neutral";
 
 const TONES: Record<Tone, string> = {
-    lamp: "bg-lamp-wash text-lamp-ink border-lamp/30",
-    plant: "bg-plant-wash text-plant border-plant/30",
-    wood: "bg-paper-sunken text-wood border-wood/30",
-    eraser: "bg-eraser-wash text-eraser border-eraser/30",
-    neutral: "bg-paper-sunken text-graphite-soft border-rule",
+    accent: "border-graphite text-graphite",
+    neutral: "border-rule text-graphite-faint",
 };
 
 export function Badge({
@@ -17,7 +18,7 @@ export function Badge({
     children,
 }: {
     tone?: Tone;
-    /** 손글씨 폰트로 표시할지 — 장식성 라벨에만 사용 */
+    /** 손글씨 폰트로 표시할지 — 매거진 영역의 장식 라벨에만 쓴다 */
     hand?: boolean;
     className?: string;
     children: React.ReactNode;
@@ -25,14 +26,29 @@ export function Badge({
     return (
         <span
             className={cn(
-                "inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5",
+                "inline-flex items-center gap-1 border px-2 py-0.5",
                 hand
                     ? "font-[family-name:var(--font-hand)] text-sm leading-5"
-                    : "text-xs font-semibold",
+                    : "text-[11px] font-medium tracking-wide",
                 TONES[tone],
                 className
             )}
         >
+            {children}
+        </span>
+    );
+}
+
+/** 테두리 없이 분류만 알리는 라벨 — 목록 행의 왼쪽 칸에 쓴다 */
+export function RowLabel({
+    className,
+    children,
+}: {
+    className?: string;
+    children: React.ReactNode;
+}) {
+    return (
+        <span className={cn("text-[13px] text-graphite-faint", className)}>
             {children}
         </span>
     );

@@ -10,7 +10,6 @@ import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { buttonStyles } from "@/components/ui/Button";
-import { SketchDivider } from "@/components/ui/Sketch";
 import { cn } from "@/lib/utils";
 import type { Post } from "@/lib/types";
 
@@ -48,7 +47,7 @@ export default function PostDetailPage({
                 <Skeleton className="h-4 w-32" />
                 <Skeleton className="h-9 w-3/4" />
                 <Skeleton className="h-4 w-40" />
-                <Skeleton className="mt-8 h-48 w-full rounded-[18px]" />
+                <Skeleton className="mt-8 h-48 w-full" />
             </div>
         );
     }
@@ -57,13 +56,12 @@ export default function PostDetailPage({
         return (
             <div className="container-read py-20">
                 <EmptyState
-                    doodle="note"
                     title="글을 찾을 수 없어요"
                     description="삭제되었거나 주소가 잘못되었을 수 있습니다."
                     action={
                         <Link
                             href="/community"
-                            className={buttonStyles({ variant: "soft" })}
+                            className={buttonStyles({ variant: "outline" })}
                         >
                             커뮤니티로 돌아가기
                         </Link>
@@ -79,7 +77,7 @@ export default function PostDetailPage({
         <div className="container-read py-10 pb-20">
             <Link
                 href="/community"
-                className="inline-flex items-center gap-1.5 text-sm font-semibold text-graphite-soft transition-colors hover:text-lamp-ink"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-graphite-soft transition-colors hover:text-accent"
             >
                 <ArrowLeft className="h-4 w-4" aria-hidden="true" />
                 목록으로 돌아가기
@@ -87,7 +85,7 @@ export default function PostDetailPage({
 
             <header className="mt-8">
                 <div className="flex flex-wrap items-center gap-2">
-                    <Badge tone={isReview ? "plant" : "lamp"}>
+                    <Badge tone="neutral">
                         {isReview ? "후기" : "질문"}
                     </Badge>
                     <span className="text-xs text-graphite-faint">{post.stats.time}</span>
@@ -105,7 +103,7 @@ export default function PostDetailPage({
                                 className={cn(
                                     "h-4 w-4",
                                     i < post.content.rating!
-                                        ? "fill-lamp text-lamp"
+                                        ? "fill-accent text-accent"
                                         : "text-rule-strong"
                                 )}
                             />
@@ -129,7 +127,7 @@ export default function PostDetailPage({
                         <div className="flex items-center gap-1.5">
                             <span className="text-sm font-bold">{post.author.name}</span>
                             {post.author.badge && (
-                                <Badge tone="wood" hand>
+                                <Badge tone="neutral">
                                     {post.author.badge}
                                 </Badge>
                             )}
@@ -141,7 +139,7 @@ export default function PostDetailPage({
 
             <article className="mt-8">
                 {post.content.image && (
-                    <div className="relative mb-8 aspect-video overflow-hidden rounded-[18px] border border-rule bg-paper-sunken">
+                    <div className="relative mb-8 aspect-video overflow-hidden border border-rule bg-paper-sunken">
                         <Image
                             src={post.content.image}
                             alt=""
@@ -168,7 +166,7 @@ export default function PostDetailPage({
                 </span>
             </div>
 
-            <SketchDivider className="my-12" />
+            <div className="my-12 border-t border-rule" />
 
             <CommentSection />
         </div>

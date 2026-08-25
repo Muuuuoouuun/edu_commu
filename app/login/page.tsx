@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { Doodle } from "@/components/ui/Sketch";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -39,9 +38,8 @@ export default function LoginPage() {
     return (
         <div className="container-read flex min-h-[80vh] items-center py-16">
             <div className="w-full">
-                <div className="paper-card tape relative mx-auto max-w-md p-8 pt-10">
+                <div className="paper-card relative mx-auto max-w-md p-8 pt-10">
                     <div className="flex flex-col items-center text-center">
-                        <Doodle name="lamp" className="h-12 w-12" />
                         <h1 className="mt-4 text-2xl">다시 오셨네요</h1>
                         <p className="mt-2 text-sm leading-relaxed text-graphite-soft">
                             로그인하면 글을 쓰고 댓글을 남길 수 있어요.
@@ -63,7 +61,7 @@ export default function LoginPage() {
                                 autoComplete="email"
                                 required
                                 defaultValue="test@example.com"
-                                className="w-full rounded-[14px] border border-rule bg-paper-sunken px-4 py-3 text-sm transition-colors focus:border-lamp"
+                                className="w-full border border-rule bg-paper-sunken px-4 py-3 text-sm transition-colors focus:border-accent"
                             />
                         </div>
 
@@ -81,14 +79,14 @@ export default function LoginPage() {
                                 autoComplete="current-password"
                                 required
                                 defaultValue="password123"
-                                className="w-full rounded-[14px] border border-rule bg-paper-sunken px-4 py-3 text-sm transition-colors focus:border-lamp"
+                                className="w-full border border-rule bg-paper-sunken px-4 py-3 text-sm transition-colors focus:border-accent"
                             />
                         </div>
 
                         {error && (
                             <p
                                 role="alert"
-                                className="flex items-start gap-2 rounded-[14px] border border-eraser/30 bg-eraser-wash px-4 py-3 text-sm text-eraser"
+                                className="flex items-start gap-2 border border-danger/30 bg-danger-wash px-4 py-3 text-sm text-danger"
                             >
                                 <AlertCircle
                                     className="mt-0.5 h-4 w-4 shrink-0"
@@ -125,7 +123,7 @@ export default function LoginPage() {
 
                 <p className="mt-6 text-center text-sm text-graphite-soft">
                     아직 둘러보는 중이신가요?{" "}
-                    <Link href="/community" className="font-semibold text-lamp-ink hover:underline">
+                    <Link href="/community" className="font-semibold text-accent hover:underline">
                         로그인 없이 읽어보기
                     </Link>
                 </p>

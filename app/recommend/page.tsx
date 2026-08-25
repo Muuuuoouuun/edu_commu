@@ -2,18 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import {
-    BookOpenText,
-    ExternalLink,
-    MapPin,
-    Search,
-    Smartphone,
-} from "lucide-react";
+import { ExternalLink, Search } from "lucide-react";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { AdSlot } from "@/components/ui/AdSlot";
-import { Doodle } from "@/components/ui/Sketch";
 import { cn } from "@/lib/utils";
 
 type Interest = "수학" | "영어" | "과학";
@@ -199,7 +192,7 @@ function ChipGroup<T extends string>({
 }) {
     return (
         <div>
-            <p className="hand-label mb-2.5">{label}</p>
+            <p className="eyebrow mb-2.5 block">{label}</p>
             <div role="group" aria-label={label} className="flex flex-wrap gap-2">
                 {options.map((option) => {
                     const active = option === value;
@@ -210,9 +203,9 @@ function ChipGroup<T extends string>({
                             aria-pressed={active}
                             onClick={() => onChange(option)}
                             className={cn(
-                                "rounded-full border px-4 py-1.5 text-sm font-semibold transition-colors",
+                                "border px-4 py-1.5 text-sm transition-colors",
                                 active
-                                    ? "border-lamp bg-lamp-wash text-lamp-ink"
+                                    ? "border-accent bg-paper-sunken text-accent"
                                     : "border-rule bg-paper-raised text-graphite-soft hover:border-rule-strong hover:text-graphite"
                             )}
                         >
@@ -225,22 +218,11 @@ function ChipGroup<T extends string>({
     );
 }
 
-function SectionTitle({
-    icon: Icon,
-    title,
-    count,
-}: {
-    icon: typeof MapPin;
-    title: string;
-    count: number;
-}) {
+function SectionTitle({ title, count }: { title: string; count: number }) {
     return (
-        <div className="mb-5 flex items-center gap-2.5">
-            <Icon className="h-5 w-5 text-lamp" aria-hidden="true" />
+        <div className="mb-5 flex items-baseline justify-between gap-4 border-b border-rule pb-3">
             <h2 className="text-xl">{title}</h2>
-            <Badge tone="neutral" hand>
-                {count}건
-            </Badge>
+            <span className="text-[13px] text-graphite-faint">{count}건</span>
         </div>
     );
 }
@@ -358,7 +340,6 @@ export default function RecommendPage() {
                 eyebrow="발품 대신 여기서 먼저"
                 title="학원·교재 추천"
                 description="지역과 관심 과목을 고르면 학원, 교재, 학습 앱을 함께 추려서 보여드립니다. 후기는 커뮤니티에서 확인해 보세요."
-                doodle="book"
             />
 
             <div className="container-page py-12">
@@ -380,10 +361,10 @@ export default function RecommendPage() {
                     </div>
 
                     <div className="mt-6">
-                        <label htmlFor="recommend-search" className="hand-label mb-2.5 block">
+                        <label htmlFor="recommend-search" className="eyebrow mb-2.5 block">
                             찾는 이름이 있다면
                         </label>
-                        <div className="flex items-center gap-3 rounded-[14px] border border-rule bg-paper-sunken px-4 py-3 focus-within:border-lamp">
+                        <div className="flex items-center gap-3 border border-rule bg-paper-sunken px-4 py-3 focus-within:border-accent">
                             <Search
                                 className="h-4 w-4 shrink-0 text-graphite-faint"
                                 aria-hidden="true"
@@ -401,14 +382,13 @@ export default function RecommendPage() {
                     <p className="mt-5 border-t border-rule pt-4 text-sm text-graphite-soft">
                         <span className="font-semibold text-graphite">{region}</span> 지역의{" "}
                         <span className="font-semibold text-graphite">{interest}</span> 관련
-                        추천 <span className="font-semibold text-lamp-ink">{totalCount}</span>건
+                        추천 <span className="font-semibold text-accent">{totalCount}</span>건
                     </p>
                 </div>
 
                 {ad && (
                     <AdSlot
                         className="mt-6"
-                        doodle="lamp"
                         title={ad.title}
                         description={ad.description}
                         cta={ad.cta}
@@ -420,7 +400,6 @@ export default function RecommendPage() {
                 {totalCount === 0 && (
                     <EmptyState
                         className="mt-10"
-                        doodle="pencil"
                         title="조건에 맞는 추천이 없어요"
                         description="검색어를 지우거나 지역을 '전체'로 바꿔보시면 결과가 나올 거예요."
                     />
@@ -430,7 +409,6 @@ export default function RecommendPage() {
                 {academies.length > 0 && (
                     <section className="mt-14">
                         <SectionTitle
-                            icon={MapPin}
                             title="가까운 학원"
                             count={academies.length}
                         />
@@ -441,7 +419,7 @@ export default function RecommendPage() {
                                     className="paper-card paper-card-hover flex flex-col p-5"
                                 >
                                     <div className="flex items-center gap-2">
-                                        <Badge tone="lamp">{academy.focus}</Badge>
+                                        <Badge tone="accent">{academy.focus}</Badge>
                                         <Badge tone="neutral">{academy.regionTag}</Badge>
                                     </div>
                                     <h3 className="mt-3.5 text-lg">{academy.name}</h3>
@@ -455,7 +433,7 @@ export default function RecommendPage() {
                                         href={academy.naverMapUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-lamp-ink hover:underline"
+                                        className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:underline"
                                     >
                                         네이버 지도에서 보기
                                         <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
@@ -470,7 +448,6 @@ export default function RecommendPage() {
                 {books.length > 0 && (
                     <section className="mt-14">
                         <SectionTitle
-                            icon={BookOpenText}
                             title="함께 보면 좋은 교재"
                             count={books.length}
                         />
@@ -505,7 +482,7 @@ export default function RecommendPage() {
                                                 />
                                             )}
                                             <div className="min-w-0">
-                                                <Badge tone="plant">{book.subject}</Badge>
+                                                <Badge tone="neutral">{book.subject}</Badge>
                                                 <h3 className="mt-2.5 text-base leading-snug">
                                                     {book.title}
                                                 </h3>
@@ -524,7 +501,7 @@ export default function RecommendPage() {
                                                 href={book.kyoboUrl}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="inline-flex items-center gap-1 text-lamp-ink hover:underline"
+                                                className="inline-flex items-center gap-1 text-accent hover:underline"
                                             >
                                                 교보문고
                                                 <ExternalLink
@@ -536,7 +513,7 @@ export default function RecommendPage() {
                                                 href={book.yes24Url}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="inline-flex items-center gap-1 text-lamp-ink hover:underline"
+                                                className="inline-flex items-center gap-1 text-accent hover:underline"
                                             >
                                                 YES24
                                                 <ExternalLink
@@ -556,7 +533,6 @@ export default function RecommendPage() {
                 {apps.length > 0 && (
                     <section className="mt-14">
                         <SectionTitle
-                            icon={Smartphone}
                             title="학습 앱·서비스"
                             count={apps.length}
                         />
@@ -576,8 +552,8 @@ export default function RecommendPage() {
                                         />
                                         <div>
                                             <div className="flex items-center gap-1.5">
-                                                <Badge tone="wood">{item.category}</Badge>
-                                                <Badge tone="lamp">{item.focus}</Badge>
+                                                <Badge tone="neutral">{item.category}</Badge>
+                                                <Badge tone="accent">{item.focus}</Badge>
                                             </div>
                                             <h3 className="mt-2 text-base">{item.name}</h3>
                                         </div>
@@ -591,7 +567,7 @@ export default function RecommendPage() {
                                         href={item.link}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-lamp-ink hover:underline"
+                                        className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:underline"
                                     >
                                         바로가기
                                         <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
@@ -602,8 +578,7 @@ export default function RecommendPage() {
                     </section>
                 )}
 
-                <div className="mt-16 flex items-start gap-3 rounded-[18px] border border-dashed border-rule-strong p-5">
-                    <Doodle name="note" className="h-8 w-8 shrink-0 text-wood" />
+                <div className="mt-16 flex items-start gap-3 border border-dashed border-rule-strong p-5">
                     <p className="text-sm leading-relaxed text-graphite-soft">
                         여기 실린 추천은 편집팀이 정리한 참고 정보입니다. 실제 등록 전에는
                         직접 상담을 받아보시고, 다녀오신 뒤에는 커뮤니티에 후기를

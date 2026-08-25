@@ -14,7 +14,6 @@ export default function CommunityPage() {
                 eyebrow="같이 고민하는 사람들"
                 title="커뮤니티"
                 description="질문이든 후기든, 지금 떠오른 그대로 적어주세요. 다듬는 건 나중 일입니다."
-                doodle="mug"
             />
             <CommunitySection />
         </>
