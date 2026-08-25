@@ -155,7 +155,7 @@ export default function PostDetailPage({
             </article>
 
             {/* 공감·댓글 수는 아직 목데이터 기준 표시 전용 */}
-            <div className="mt-10 flex items-center gap-6 border-y border-rule py-4 text-sm text-graphite-faint">
+            <div className="mt-10 flex items-center gap-6 border-t border-rule py-4 text-sm text-graphite-faint">
                 <span className="inline-flex items-center gap-2">
                     <Heart className="h-4 w-4" aria-hidden="true" />
                     공감 {post.stats.likes}
@@ -166,7 +166,7 @@ export default function PostDetailPage({
                 </span>
             </div>
 
-            <div className="my-12 border-t border-rule" />
+            <div className="mt-12" />
 
             <CommentSection />
         </div>

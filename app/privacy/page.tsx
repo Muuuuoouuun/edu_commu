@@ -15,7 +15,7 @@ export default function PrivacyPage() {
                 description="최종 수정일 2026년 2월 1일"
             />
 
-            <div className="container-read py-14">
+            <div className="container-read pb-16 pt-10">
                 <Prose>
                     <p>
                         책상서랍(이하 &lsquo;서비스&rsquo;)은 이용자의 개인정보를

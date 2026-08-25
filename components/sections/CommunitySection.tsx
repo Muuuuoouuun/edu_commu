@@ -50,7 +50,13 @@ export function CommunitySection({
     const visible = limit ? filtered.slice(0, limit) : filtered;
 
     return (
-        <section className="container-page pb-6 pt-20 sm:pt-24">
+        <section
+            className={cn(
+                "container-page pb-6",
+                // 홈에서는 앞 섹션과 간격을 두고, 페이지에서는 PageHeader 바로 아래에 붙인다
+                limit ? "pt-20 sm:pt-24" : "pt-10"
+            )}
+        >
             <CreatePostModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
@@ -60,28 +66,26 @@ export function CommunitySection({
                 }}
             />
 
-            <div className="mb-4 flex items-baseline justify-between gap-6">
-                <p className="eyebrow">커뮤니티</p>
-                {limit ? (
+            {limit && (
+                <div className="mb-4 flex items-baseline justify-between gap-6">
+                    <p className="eyebrow">커뮤니티</p>
                     <Link
                         href="/community"
                         className="text-[13px] text-graphite-soft transition-opacity hover:opacity-60"
                     >
                         전체 보기
                     </Link>
-                ) : (
-                    <Button size="sm" onClick={() => setIsModalOpen(true)}>
-                        글 쓰기
-                    </Button>
-                )}
-            </div>
+                </div>
+            )}
 
-            {showTabs && !limit && (
-                <div
-                    role="tablist"
-                    aria-label="글 종류"
-                    className="mb-2 flex gap-6 border-b border-rule"
-                >
+            {!limit && (
+                <div className="mb-2 flex items-end justify-between gap-6 border-b border-rule">
+                    <div
+                        role="tablist"
+                        aria-label="글 종류"
+                        hidden={!showTabs}
+                        className="flex gap-6"
+                    >
                     {TABS.map((tab) => {
                         const active = activeTab === tab.value;
                         return (
@@ -102,6 +106,14 @@ export function CommunitySection({
                             </button>
                         );
                     })}
+                    </div>
+                    <Button
+                        size="sm"
+                        className="mb-2"
+                        onClick={() => setIsModalOpen(true)}
+                    >
+                        글 쓰기
+                    </Button>
                 </div>
             )}
 

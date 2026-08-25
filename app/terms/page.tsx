@@ -15,7 +15,7 @@ export default function TermsPage() {
                 description="최종 수정일 2026년 2월 1일"
             />
 
-            <div className="container-read py-14">
+            <div className="container-read pb-16 pt-10">
                 <Prose>
                     <p>
                         책상서랍(이하 &lsquo;서비스&rsquo;)을 이용해 주셔서 고맙습니다.

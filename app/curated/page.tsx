@@ -16,7 +16,7 @@ export default function CuratedPage() {
                 description="짧게 훑기보다 한 편을 끝까지 읽는 편이 남습니다. 여백을 넉넉히 두고 고른 글들입니다."
             />
 
-            <div className="container-page py-16">
+            <div className="container-page pb-16 pt-10">
                 {CURATED_ITEMS.map((item, i) => (
                     <article
                         key={item.id}

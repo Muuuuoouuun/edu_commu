@@ -19,7 +19,7 @@ export default function ContactPage() {
                 description="불편한 점, 있으면 좋겠는 기능, 잘못된 정보 제보까지 편하게 남겨주세요. 읽고 답장드립니다."
             />
 
-            <div className="container-read py-14">
+            <div className="container-read pb-16 pt-10">
                 <div className="paper-card p-6 sm:p-8">
                     <form className="space-y-5">
                         <div>
