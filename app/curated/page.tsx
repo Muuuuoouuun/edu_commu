@@ -20,7 +20,7 @@ export default function CuratedPage() {
                 {CURATED_ITEMS.map((item, i) => (
                     <article
                         key={item.id}
-                        className={`group relative flex flex-col gap-4 border-b border-rule py-9 sm:flex-row sm:items-baseline sm:gap-10 ${
+                        className={`relative flex flex-col gap-4 border-b border-rule py-9 sm:flex-row sm:items-baseline sm:gap-10 ${
                             i === 0 ? "rule-lead" : ""
                         }`}
                     >
@@ -29,14 +29,8 @@ export default function CuratedPage() {
                         </div>
 
                         <div className="min-w-0 flex-1">
-                            <h2 className="text-[26px] leading-[1.45]">
-                                <a
-                                    href={`#${item.id}`}
-                                    className="transition-opacity after:absolute after:inset-0 group-hover:opacity-60"
-                                >
-                                    {item.title}
-                                </a>
-                            </h2>
+                            {/* 큐레이션 상세 라우트가 아직 없어 링크를 걸지 않는다 */}
+                            <h2 className="text-[26px] leading-[1.45]">{item.title}</h2>
                             <p className="mt-2.5 max-w-2xl text-[15px] leading-[1.85] text-graphite-soft">
                                 {item.summary}
                             </p>

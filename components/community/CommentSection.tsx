@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Send, ThumbsUp } from "lucide-react";
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
 
 type Comment = {
     id: number;
@@ -33,6 +34,17 @@ const INITIAL_COMMENTS: Comment[] = [
 export function CommentSection() {
     const [comments, setComments] = useState(INITIAL_COMMENTS);
     const [draft, setDraft] = useState("");
+    // 아직 서버에 저장되지 않는다 — 새로고침하면 사라진다
+    const [helpful, setHelpful] = useState<Set<number>>(new Set());
+
+    function toggleHelpful(id: number) {
+        setHelpful((prev) => {
+            const next = new Set(prev);
+            if (next.has(id)) next.delete(id);
+            else next.add(id);
+            return next;
+        });
+    }
 
     function handleSubmit(event: React.FormEvent) {
         event.preventDefault();
@@ -105,10 +117,23 @@ export function CommentSection() {
                             </p>
                             <button
                                 type="button"
-                                className="mt-2.5 inline-flex items-center gap-1.5 text-xs text-graphite-faint transition-colors hover:text-accent"
+                                onClick={() => toggleHelpful(comment.id)}
+                                aria-pressed={helpful.has(comment.id)}
+                                className={cn(
+                                    "mt-2.5 inline-flex items-center gap-1.5 text-xs transition-colors",
+                                    helpful.has(comment.id)
+                                        ? "text-graphite"
+                                        : "text-graphite-faint hover:text-graphite"
+                                )}
                             >
-                                <ThumbsUp className="h-3 w-3" aria-hidden="true" />
-                                도움돼요 {comment.likes > 0 && comment.likes}
+                                <ThumbsUp
+                                    className={cn(
+                                        "h-3 w-3",
+                                        helpful.has(comment.id) && "fill-current"
+                                    )}
+                                    aria-hidden="true"
+                                />
+                                도움돼요 {comment.likes + (helpful.has(comment.id) ? 1 : 0)}
                             </button>
                         </div>
                     </li>
