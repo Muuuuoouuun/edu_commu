@@ -1,142 +1,174 @@
 "use client";
 
-import { useEffect, useState, use } from "react";
-import { useRouter } from "next/navigation";
-import { ArrowLeft, Share2, Heart, MessageCircle } from "lucide-react";
-import Image from "next/image";
-import { CommentSection } from "@/components/community/CommentSection";
+import { use, useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { ArrowLeft, Heart, MessageCircle, Star } from "lucide-react";
+import { CommentSection } from "@/components/community/CommentSection";
+import { Avatar } from "@/components/ui/Avatar";
+import { Badge } from "@/components/ui/Badge";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { Skeleton } from "@/components/ui/Skeleton";
+import { buttonStyles } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
+import type { Post } from "@/lib/types";
 
-interface Post {
-    id: string;
-    type: "question" | "review";
-    author: {
-        name: string;
-        avatar?: string;
-        badge?: string;
-    };
-    content: {
-        title?: string;
-        text: string;
-        image?: string;
-        rating?: number;
-    };
-    stats: {
-        likes: number;
-        comments: number;
-        time: string;
-    };
-}
-
-export default function PostDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default function PostDetailPage({
+    params,
+}: {
+    params: Promise<{ id: string }>;
+}) {
     const { id } = use(params);
-    const router = useRouter();
     const [post, setPost] = useState<Post | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchPost = async () => {
+        let active = true;
+
+        (async () => {
             try {
                 const res = await fetch(`/api/posts/${id}`);
-                if (res.ok) {
-                    const data = await res.json();
-                    setPost(data);
-                } else {
-                    // router.push("/community"); // Redirect if not found (optional)
-                }
+                if (res.ok && active) setPost(await res.json());
             } catch (error) {
-                console.error("Failed to fetch post", error);
+                console.error("글을 불러오지 못했습니다", error);
             } finally {
-                setIsLoading(false);
+                if (active) setIsLoading(false);
             }
-        };
+        })();
 
-        fetchPost();
-    }, [id, router]);
+        return () => {
+            active = false;
+        };
+    }, [id]);
 
     if (isLoading) {
-        return <div className="min-h-screen pt-32 text-center text-muted">Loading...</div>;
+        return (
+            <div className="container-read space-y-4 py-16">
+                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-9 w-3/4" />
+                <Skeleton className="h-4 w-40" />
+                <Skeleton className="mt-8 h-48 w-full" />
+            </div>
+        );
     }
 
     if (!post) {
-        return <div className="min-h-screen pt-32 text-center text-muted">Post not found.</div>;
+        return (
+            <div className="container-read py-20">
+                <EmptyState
+                    title="글을 찾을 수 없어요"
+                    description="삭제되었거나 주소가 잘못되었을 수 있습니다."
+                    action={
+                        <Link
+                            href="/community"
+                            className={buttonStyles({ variant: "outline" })}
+                        >
+                            커뮤니티로 돌아가기
+                        </Link>
+                    }
+                />
+            </div>
+        );
     }
 
+    const isReview = post.type === "review";
+
     return (
-        <div className="min-h-screen bg-background">
-            <div className="container mx-auto px-4 md:px-6 max-w-3xl pt-24 pb-20">
-                {/* Back Link */}
-                <Link href="/community" className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-muted hover:text-foreground mb-8 transition-colors">
-                    <ArrowLeft className="w-4 h-4" />
-                    목록으로 돌아가기
-                </Link>
+        <div className="container-read py-10 pb-20">
+            <Link
+                href="/community"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-graphite-soft transition-colors hover:text-accent"
+            >
+                <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+                목록으로 돌아가기
+            </Link>
 
-                {/* Header */}
-                <header className="mb-10">
-                    <div className="flex items-center gap-2 mb-6">
-                        <span className="px-2 py-1 rounded text-[10px] uppercase tracking-widest font-bold border border-foreground/20 text-foreground/60">
-                            {post.type}
-                        </span>
-                        <span className="text-xs text-muted font-bold uppercase tracking-widest">{post.stats.time}</span>
-                    </div>
-                    {post.content.title && (
-                        <h1 className="text-3xl md:text-5xl font-serif font-medium text-foreground mb-6 leading-tight">
-                            {post.content.title}
-                        </h1>
-                    )}
-
-                    <div className="flex items-center justify-between border-y border-border py-4">
-                        <div className="flex items-center gap-3">
-                            <div className="relative w-10 h-10 rounded-full bg-muted overflow-hidden">
-                                {post.author.avatar ? (
-                                    <Image src={post.author.avatar} alt={post.author.name} fill className="object-cover" />
-                                ) : (
-                                    <div className="w-full h-full flex items-center justify-center bg-primary text-foreground font-serif italic font-bold">
-                                        {post.author.name[0]}
-                                    </div>
-                                )}
-                            </div>
-                            <div>
-                                <div className="font-bold text-sm text-foreground">{post.author.name}</div>
-                                <div className="text-xs text-muted">Author</div>
-                            </div>
-                        </div>
-
-                        <div className="flex gap-4">
-                            <button className="p-2 text-muted hover:text-foreground transition-colors">
-                                <Share2 className="w-5 h-5" />
-                            </button>
-                        </div>
-                    </div>
-                </header>
-
-                {/* Content */}
-                <article className="prose prose-lg prose-stone max-w-none text-foreground/90 font-sans leading-relaxed">
-                    {post.content.image && (
-                        <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-10 bg-muted">
-                            <Image src={post.content.image} alt={post.content.title || "Post Image"} fill className="object-cover" />
-                        </div>
-                    )}
-                    <div className="whitespace-pre-line">
-                        {post.content.text}
-                    </div>
-                </article>
-
-                {/* Action Bar */}
-                <div className="flex items-center gap-6 mt-12 py-6 border-y border-border">
-                    <button className="flex items-center gap-2 text-muted hover:text-accent-rose transition-colors group">
-                        <Heart className="w-6 h-6 group-hover:fill-current" />
-                        <span className="font-medium">{post.stats.likes} Likes</span>
-                    </button>
-                    <button className="flex items-center gap-2 text-muted hover:text-foreground transition-colors">
-                        <MessageCircle className="w-6 h-6" />
-                        <span className="font-medium">{post.stats.comments} Comments</span>
-                    </button>
+            <header className="mt-8">
+                <div className="flex flex-wrap items-center gap-2">
+                    <Badge tone="neutral">
+                        {isReview ? "후기" : "질문"}
+                    </Badge>
+                    <span className="text-xs text-graphite-faint">{post.stats.time}</span>
                 </div>
 
-                {/* Comments */}
-                <CommentSection />
+                {isReview && typeof post.content.rating === "number" && (
+                    <div
+                        className="mt-4 flex items-center gap-0.5"
+                        aria-label={`5점 만점에 ${post.content.rating}점`}
+                    >
+                        {Array.from({ length: 5 }, (_, i) => (
+                            <Star
+                                key={i}
+                                aria-hidden="true"
+                                className={cn(
+                                    "h-4 w-4",
+                                    i < post.content.rating!
+                                        ? "fill-accent text-accent"
+                                        : "text-rule-strong"
+                                )}
+                            />
+                        ))}
+                    </div>
+                )}
+
+                {post.content.title && (
+                    <h1 className="mt-4 text-2xl leading-tight sm:text-3xl">
+                        {post.content.title}
+                    </h1>
+                )}
+
+                <div className="mt-6 flex items-center gap-3 border-y border-rule py-4">
+                    <Avatar
+                        name={post.author.name}
+                        src={post.author.avatar}
+                        size="md"
+                    />
+                    <div>
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-sm font-bold">{post.author.name}</span>
+                            {post.author.badge && (
+                                <Badge tone="neutral">
+                                    {post.author.badge}
+                                </Badge>
+                            )}
+                        </div>
+                        <p className="mt-0.5 text-xs text-graphite-faint">작성자</p>
+                    </div>
+                </div>
+            </header>
+
+            <article className="mt-8">
+                {post.content.image && (
+                    <div className="relative mb-8 aspect-video overflow-hidden border border-rule bg-paper-sunken">
+                        <Image
+                            src={post.content.image}
+                            alt=""
+                            fill
+                            sizes="(min-width: 768px) 768px, 100vw"
+                            className="object-cover"
+                        />
+                    </div>
+                )}
+                <p className="whitespace-pre-line text-[17px] leading-[1.85] text-graphite-soft">
+                    {post.content.text}
+                </p>
+            </article>
+
+            {/* 공감·댓글 수는 아직 목데이터 기준 표시 전용 */}
+            <div className="mt-10 flex items-center gap-6 border-t border-rule py-4 text-sm text-graphite-faint">
+                <span className="inline-flex items-center gap-2">
+                    <Heart className="h-4 w-4" aria-hidden="true" />
+                    공감 {post.stats.likes}
+                </span>
+                <span className="inline-flex items-center gap-2">
+                    <MessageCircle className="h-4 w-4" aria-hidden="true" />
+                    댓글 {post.stats.comments}
+                </span>
             </div>
+
+            <div className="mt-12" />
+
+            <CommentSection />
         </div>
     );
 }

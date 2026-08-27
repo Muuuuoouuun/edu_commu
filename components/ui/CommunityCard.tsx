@@ -1,107 +1,79 @@
-"use client";
-
-import { Heart, MessageCircle, Share2, MoreHorizontal, Star } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
+import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { Post } from "@/lib/types";
 
-interface CommunityCardProps {
-    type: "question" | "review";
-    author: {
-        name: string;
-        avatar?: string;
-        badge?: string;
-    };
-    content: {
-        title?: string;
-        text: string;
-        image?: string;
-        rating?: number; // Only for review
-    };
-    stats: {
-        likes: number;
-        comments: number;
-        time: string;
-    };
-}
+/**
+ * 커뮤니티 글 한 줄.
+ * 카드가 아니라 목록 행이다 — 왼쪽에 분류, 가운데 제목과 본문, 오른쪽에 작성자와 반응.
+ * 행끼리는 1px 선으로만 나뉜다.
+ */
+export function CommunityCard({
+    id,
+    type,
+    author,
+    content,
+    stats,
+    lead = false,
+}: Post & { /** 목록의 첫 행이면 위에 진한 선을 긋는다 */ lead?: boolean }) {
+    const isReview = type === "review";
 
-export function CommunityCard({ id, type, author, content, stats }: CommunityCardProps & { id?: string }) {
-    const CardContent = (
-        <div className="bg-background border-t border-border pt-8 pb-4 transition-colors hover:bg-muted/5 group cursor-pointer">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                    <div className="relative w-8 h-8 rounded-full bg-muted overflow-hidden">
-                        {author.avatar ? (
-                            <Image src={author.avatar} alt={author.name} fill className="object-cover" />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-primary text-foreground font-serif text-xs italic">
-                                {author.name[0]}
-                            </div>
-                        )}
-                    </div>
-                    <div>
-                        <div className="flex items-center gap-2">
-                            <span className="font-semibold text-sm text-foreground">{author.name}</span>
-                            {author.badge && (
-                                <span className="text-[10px] items-center px-1.5 py-0.5 border border-border text-muted font-medium uppercase tracking-widest">
-                                    {author.badge}
-                                </span>
-                            )}
-                        </div>
-                        <p className="text-[11px] font-bold uppercase tracking-widest text-muted/60">{stats.time}</p>
-                    </div>
-                </div>
-                <button className="text-muted hover:text-foreground">
-                    <MoreHorizontal className="w-4 h-4" />
-                </button>
+    return (
+        <article
+            className={cn(
+                "group relative flex flex-col gap-4 border-b border-rule py-7 sm:flex-row sm:items-baseline sm:gap-10",
+                lead ? "rule-lead" : "border-t-0"
+            )}
+        >
+            <div className="shrink-0 sm:w-10">
+                <span className="text-[13px] text-graphite-faint">
+                    {isReview ? "후기" : "질문"}
+                </span>
             </div>
 
-            {/* Content */}
-            <div className="mb-6">
-                {type === "review" && content.rating && (
-                    <div className="flex items-center gap-1 mb-3 text-accent-gold">
-                        {[...Array(5)].map((_, i) => (
-                            <Star key={i} className={cn("w-3 h-3 fill-current", i < content.rating! ? "" : "text-border fill-transparent")} />
+            <div className="min-w-0 flex-1">
+                {isReview && typeof content.rating === "number" && (
+                    <div
+                        className="mb-2 flex items-center gap-0.5"
+                        aria-label={`5점 만점에 ${content.rating}점`}
+                    >
+                        {Array.from({ length: 5 }, (_, i) => (
+                            <Star
+                                key={i}
+                                aria-hidden="true"
+                                className={cn(
+                                    "h-3 w-3",
+                                    i < content.rating!
+                                        ? "fill-graphite text-graphite"
+                                        : "text-rule-strong"
+                                )}
+                            />
                         ))}
                     </div>
                 )}
 
-                {content.title && <h4 className="font-serif text-xl font-medium mb-2 text-foreground group-hover:text-primary transition-colors">{content.title}</h4>}
+                <h3 className="line-clamp-2 text-[22px] leading-[1.5]">
+                    <Link
+                        href={`/community/${id}`}
+                        className="transition-opacity after:absolute after:inset-0 group-hover:opacity-60"
+                    >
+                        {content.title ?? content.text.split("\n")[0]}
+                    </Link>
+                </h3>
 
-                <p className="text-foreground text-base leading-relaxed whitespace-pre-line mb-4 font-sans line-clamp-3">
-                    {content.text}
-                </p>
-
-                {content.image && (
-                    <div className="relative w-full h-[300px] overflow-hidden bg-muted mb-4">
-                        <Image src={content.image} alt="Post content" fill className="object-cover" />
-                    </div>
+                {content.title && (
+                    <p className="mt-2 line-clamp-2 max-w-2xl text-sm leading-[1.8] text-graphite-soft">
+                        {content.text}
+                    </p>
                 )}
             </div>
 
-            {/* Footer / Actions */}
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-8">
-                    <button className="flex items-center gap-2 text-muted hover:text-foreground transition-all group/action">
-                        <Heart className="w-4 h-4 group-hover/action:fill-current" />
-                        <span className="text-xs font-bold uppercase tracking-widest">{stats.likes}</span>
-                    </button>
-                    <button className="flex items-center gap-2 text-muted hover:text-foreground transition-all group/action">
-                        <MessageCircle className="w-4 h-4" />
-                        <span className="text-xs font-bold uppercase tracking-widest">{stats.comments}</span>
-                    </button>
-                </div>
-                <button className="text-muted hover:text-foreground">
-                    <Share2 className="w-4 h-4" />
-                </button>
+            <div className="shrink-0 text-left sm:w-40 sm:text-right">
+                <p className="text-[13px]">{author.name}</p>
+                <p className="mt-1.5 text-[13px] text-graphite-faint">
+                    공감 {stats.likes} · 댓글 {stats.comments}
+                </p>
             </div>
-        </div>
+        </article>
     );
-
-    return id ? (
-        <Link href={`/community/${id}`}>
-            {CardContent}
-        </Link>
-    ) : CardContent;
 }

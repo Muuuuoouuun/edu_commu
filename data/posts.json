@@ -3,50 +3,85 @@
         "id": "1",
         "type": "question",
         "author": {
-            "name": "Alice",
-            "badge": "Newbie"
+            "name": "이서준",
+            "badge": "새내기"
         },
         "content": {
-            "text": "What is the best way to start learning UX design for beginners?"
+            "title": "고1 수학, 개념서부터 다시 봐야 할까요?",
+            "text": "중간고사에서 이차함수 단원을 크게 틀렸습니다. 문제집을 더 푸는 게 나을지, 개념서로 돌아가는 게 나을지 고민입니다.\n\n지금까지는 유형서 위주로 풀었는데 조금만 응용되면 손을 못 대겠어요. 비슷한 경험 있으신 분 계실까요?"
         },
         "stats": {
             "likes": 12,
             "comments": 5,
-            "time": "2h ago"
+            "time": "2시간 전"
         }
     },
     {
         "id": "2",
         "type": "review",
         "author": {
-            "name": "Bella",
-            "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=2264&auto=format&fit=crop",
-            "badge": "Pro"
+            "name": "정하은",
+            "badge": "단골"
         },
         "content": {
-            "text": "Just finished the 'Deep Dive React' course. Absolutely unified my understanding of hooks.",
-            "rating": 5,
-            "title": "Must take for React devs"
+            "title": "목동 리딩마스터 3개월 다녀본 후기",
+            "text": "주 2회 독해반으로 다녔습니다. 좋았던 점은 매주 첨삭이 실제로 꼼꼼하게 온다는 거였어요. 틀린 문장을 그냥 넘기지 않고 구조를 잡아줍니다.\n\n아쉬운 점은 반 인원이 생각보다 많아서 질문 시간이 짧다는 것. 스스로 질문 정리를 해가야 본전을 뽑습니다.",
+            "rating": 4
         },
         "stats": {
             "likes": 45,
             "comments": 12,
-            "time": "5h ago"
+            "time": "5시간 전"
         }
     },
     {
         "id": "3",
         "type": "question",
         "author": {
-            "name": "Catherine"
+            "name": "박민수"
         },
         "content": {
-            "text": "Has anyone tried the new iPad for note taking? Is it worth it?"
+            "text": "필기용으로 태블릿 쓰시는 분들 어떠신가요? 종이가 더 나은지 고민 중입니다. 복습할 때 검색이 되는 건 확실히 장점 같은데, 집중이 잘 안 될까 봐 망설여져요."
         },
         "stats": {
             "likes": 8,
             "comments": 20,
-            "time": "1d ago"
+            "time": "1일 전"
+        }
+    },
+    {
+        "id": "4",
+        "type": "review",
+        "author": {
+            "name": "윤지아",
+            "badge": "학부모"
+        },
+        "content": {
+            "title": "완자 과학탐구, 중위권 아이에게 괜찮았어요",
+            "text": "개념 설명이 친절해서 혼자서도 따라갈 수 있었습니다. 다만 심화 문제는 부족해서 상위권 학생에게는 아쉬울 수 있을 것 같아요.\n\n학교 시험 대비용으로는 충분했습니다.",
+            "rating": 4
+        },
+        "stats": {
+            "likes": 23,
+            "comments": 7,
+            "time": "2일 전"
+        }
+    },
+    {
+        "id": "5",
+        "type": "question",
+        "author": {
+            "name": "강태윤",
+            "badge": "고3"
+        },
+        "content": {
+            "title": "시험 기간에 잠을 줄이는 게 맞을까요?",
+            "text": "요즘 4시간 정도 자는데 낮에 집중이 안 됩니다. 그렇다고 더 자면 진도가 밀릴 것 같아 불안해요. 다들 어떻게 조절하시나요?"
+        },
+        "stats": {
+            "likes": 31,
+            "comments": 18,
+            "time": "3일 전"
         }
     }
 ]

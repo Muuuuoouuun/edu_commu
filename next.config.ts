@@ -9,13 +9,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Ensure we can deploy MVP even with minor warnings
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
 };
 
 export default nextConfig;

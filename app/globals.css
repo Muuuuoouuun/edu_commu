@@ -1,80 +1,231 @@
 @import "tailwindcss";
 
-@theme {
-  /* Fonts */
-  --font-sans: "Pretendard Variable", "Pretendard", var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-playfair), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+/* ==========================================================================
+   Class-based dark mode (system / light / dark toggle writes `.dark` on <html>)
+   ========================================================================== */
+@custom-variant dark (&:where(.dark, .dark *));
 
-  /* Colors - Softer Beige & Warm Tone */
-  --color-background: #f4f1ea;
-  --color-foreground: #2a2824;
-  --color-primary: #8c8270;
-  --color-primary-foreground: #f4f1ea;
-  --color-muted: #78736b;
-  --color-border: #dcd7cd;
-  --color-accent-gold: #b08d55;
+/* ==========================================================================
+   Palette — 흰 종이 위의 잉크
+   색을 거의 쓰지 않는다. 위계는 글자 크기와 회색 단계, 1px 선으로만 만든다.
+   ========================================================================== */
+:root {
+    color-scheme: light;
 
-  /* Design Tokens for premium/editorial UI */
-  --color-surface: #f7f6f2;
-  --color-surface-elevated: #ffffffb3;
-  --color-text-strong: #1d1d1f;
-  --color-text-secondary: #66666d;
-  --color-text-tertiary: #8b8b93;
-  --radius-card-xl: 30px;
-  --shadow-card-soft: 0 14px 40px rgba(0, 0, 0, 0.05);
+    /* Surfaces */
+    --paper: #ffffff;
+    --paper-raised: #ffffff; /* 카드도 흰색 — 테두리로만 구분한다 */
+    --paper-sunken: #faf9f7; /* 입력창·커버처럼 살짝 눌린 면 */
+
+    /* Ink */
+    --graphite: #141414;
+    --graphite-soft: #6e6e6e;
+    --graphite-faint: #9b9b9b;
+
+    /* Lines */
+    --rule: #e8e8e8;
+    --rule-strong: #c4c4c4;
+
+    /* Accent — 단색. 활성 표시·링크·밑줄·진행 바에만 쓴다. */
+    --accent: #141414;
+    --accent-on: #ffffff;
+
+    /* 오류 전달에만 남긴 유일한 유채색 */
+    --danger: #b3261e;
+    --danger-wash: #fceeec;
+
+    --select: #ececec;
 }
 
+.dark {
+    color-scheme: dark;
+
+    --paper: #121212;
+    --paper-raised: #1a1a1a;
+    --paper-sunken: #171717;
+
+    --graphite: #ededed;
+    --graphite-soft: #a6a6a6;
+    --graphite-faint: #757575;
+
+    --rule: #2a2a2a;
+    --rule-strong: #4a4a4a;
+
+    /* 반전 — 액센트는 본문보다 한 단계 더 밝게 두어 구분한다 */
+    --accent: #ffffff;
+    --accent-on: #121212;
+
+    --danger: #f2b8b5;
+    --danger-wash: #2a1a1a;
+
+    --select: #333333;
+}
+
+/* ==========================================================================
+   Theme — tokens as Tailwind utilities (bg-paper, text-graphite, ...)
+   ========================================================================== */
+@theme inline {
+    --color-paper: var(--paper);
+    --color-paper-raised: var(--paper-raised);
+    --color-paper-sunken: var(--paper-sunken);
+
+    --color-graphite: var(--graphite);
+    --color-graphite-soft: var(--graphite-soft);
+    --color-graphite-faint: var(--graphite-faint);
+
+    --color-rule: var(--rule);
+    --color-rule-strong: var(--rule-strong);
+
+    --color-accent: var(--accent);
+    --color-accent-on: var(--accent-on);
+    --color-danger: var(--danger);
+    --color-danger-wash: var(--danger-wash);
+
+    /* Fonts
+       본문·UI는 시스템에 설치된 Pretendard → 시스템 한글 폰트로 폴백한다.
+       제목은 Gowun Dodum, 매거진 강조는 Gaegu — 둘 다 layout.tsx에서 링크로 받는다. */
+    --font-sans: "Pretendard Variable", "Pretendard", "Apple SD Gothic Neo",
+        "Malgun Gothic", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Gowun Dodum", "Apple SD Gothic Neo", ui-serif, serif;
+    --font-hand: "Gaegu", "Nanum Pen Script", "Apple SD Gothic Neo", cursive;
+
+    /* Shape — 각진 형태가 기본. 아바타·토글만 rounded-full로 따로 둥글린다. */
+    --radius-sm: 0;
+    --radius-md: 0;
+    --radius-lg: 0;
+    --radius-xl: 0;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
 @layer base {
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-  }
+    * {
+        border-color: var(--rule);
+    }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family: var(--font-sans);
-    font-weight: 700;
-    letter-spacing: -0.01em;
-  }
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background-color: var(--paper);
+        color: var(--graphite);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        /* 한글은 어절 단위로 끊는다 — 없으면 낱말 중간에서 줄이 바뀐다 */
+        word-break: keep-all;
+        overflow-wrap: break-word;
+    }
+
+    /* 제목은 굵기가 아니라 크기와 서체로 구분한다 (Gowun Dodum은 400 한 종류뿐) */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--font-display);
+        font-weight: 400;
+        letter-spacing: 0.005em;
+        text-wrap: balance;
+    }
+
+    p {
+        text-wrap: pretty;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+    }
+
+    ::selection {
+        background: var(--select);
+        color: var(--graphite);
+    }
+
+    ::placeholder {
+        color: var(--graphite-faint);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
 }
 
+/* ==========================================================================
+   Components
+   ========================================================================== */
 @layer components {
-  .btn-pill {
-    @apply px-5 py-2 rounded-full text-sm font-medium transition-colors;
-  }
+    .container-page {
+        @apply mx-auto w-full max-w-6xl px-6 sm:px-10;
+    }
 
-  .btn-primary {
-    @apply px-5 py-2 rounded-full text-sm font-medium transition-colors bg-foreground text-background hover:opacity-90;
-  }
+    .container-read {
+        @apply mx-auto w-full max-w-3xl px-6 sm:px-10;
+    }
 
-  .btn-outline {
-    @apply px-5 py-2 rounded-full text-sm font-medium transition-colors border border-foreground/20 hover:bg-foreground/5;
-  }
+    /* 카드 — 채움도 그림자도 없이 1px 실선으로만 잡는다 */
+    .paper-card {
+        background-color: var(--paper-raised);
+        border: 1px solid var(--rule);
+        transition: border-color 200ms ease-out;
+    }
 
-  .content-container {
-    @apply max-w-6xl mx-auto px-6 md:px-10;
-  }
+    .paper-card-hover:hover {
+        border-color: var(--rule-strong);
+    }
 
-  .surface-card {
-    border-radius: var(--radius-card-xl);
-    background: var(--color-surface-elevated);
-    box-shadow: var(--shadow-card-soft);
-    @apply border border-black/5 overflow-hidden;
-  }
+    /* 목록의 첫 행 위에 긋는 진한 선 — 섹션의 시작을 알린다 */
+    .rule-lead {
+        border-top: 1px solid var(--graphite);
+    }
 
-  .editorial-eyebrow {
-    color: var(--color-text-tertiary);
-    @apply text-xs tracking-[0.12em] uppercase;
-  }
+    /* 섹션 눈썹 — 자간을 넓힌 작은 라벨 */
+    .eyebrow {
+        @apply text-xs;
+        letter-spacing: 0.08em;
+        color: var(--graphite-faint);
+    }
 
-  .section-title {
-    color: var(--color-text-strong);
-    @apply text-2xl md:text-3xl font-semibold tracking-[-0.01em];
-  }
+    /* 연필 손글씨 라벨 — 매거진 섹션에서만 쓴다 */
+    .hand-label {
+        font-family: var(--font-hand);
+        color: var(--graphite-soft);
+        @apply text-lg leading-none;
+    }
+
+    /* 모눈 종이 — 매거진 커버의 유일한 질감 */
+    .grid-paper {
+        background-image: linear-gradient(var(--rule) 1px, transparent 1px),
+            linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+        background-size: 26px 26px;
+    }
+}
+
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+@layer utilities {
+    .no-scrollbar {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
 }

@@ -3,78 +3,130 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import Link from "next/link";
+import { AlertCircle, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 export default function LoginPage() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
+    async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+        event.preventDefault();
         setIsLoading(true);
+        setError(null);
 
-        const formData = new FormData(e.currentTarget);
-        const email = formData.get("email") as string;
-        const password = formData.get("password") as string;
-
+        const formData = new FormData(event.currentTarget);
         const result = await signIn("credentials", {
-            email,
-            password,
+            email: formData.get("email") as string,
+            password: formData.get("password") as string,
             redirect: false,
         });
 
         if (result?.error) {
-            alert("Invalid credentials. Try test@example.com / password123");
+            // 기존에는 alert()로 알렸다 — 화면 안에서 조용히 안내하도록 바꿨다
+            setError("이메일 또는 비밀번호가 맞지 않아요. 다시 확인해 주세요.");
             setIsLoading(false);
-        } else {
-            router.push("/community"); // Redirect to community after login
-            router.refresh();
+            return;
         }
+
+        router.push("/community");
+        router.refresh();
     }
 
     return (
-        <div className="flex items-center justify-center min-h-[85vh] bg-background">
-            <div className="w-full max-w-sm p-8 bg-background border border-border shadow-sm">
-                <div className="text-center mb-10">
-                    <h1 className="text-3xl font-serif font-medium text-foreground mb-3">Sign in to LUMIERE</h1>
-                    <p className="text-muted text-sm">Access the community and premium insights</p>
-                </div>
-
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div>
-                        <label className="block text-xs font-bold uppercase tracking-widest text-muted mb-2">Email</label>
-                        <input
-                            name="email"
-                            type="email"
-                            defaultValue="test@example.com"
-                            required
-                            className="w-full bg-transparent px-4 py-3 border border-border focus:border-foreground outline-none transition-colors text-sm"
-                        />
+        <div className="container-read flex min-h-[80vh] items-center py-16">
+            <div className="w-full">
+                <div className="paper-card relative mx-auto max-w-md p-8 pt-10">
+                    <div className="flex flex-col items-center text-center">
+                        <h1 className="mt-4 text-2xl">다시 오셨네요</h1>
+                        <p className="mt-2 text-sm leading-relaxed text-graphite-soft">
+                            로그인하면 글을 쓰고 댓글을 남길 수 있어요.
+                        </p>
                     </div>
 
-                    <div>
-                        <label className="block text-xs font-bold uppercase tracking-widest text-muted mb-2">Password</label>
-                        <input
-                            name="password"
-                            type="password"
-                            defaultValue="password123"
-                            required
-                            className="w-full bg-transparent px-4 py-3 border border-border focus:border-foreground outline-none transition-colors text-sm"
-                        />
-                    </div>
+                    <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+                        <div>
+                            <label
+                                htmlFor="email"
+                                className="mb-1.5 block text-sm font-semibold"
+                            >
+                                이메일
+                            </label>
+                            <input
+                                id="email"
+                                name="email"
+                                type="email"
+                                autoComplete="email"
+                                required
+                                defaultValue="test@example.com"
+                                className="w-full border border-rule bg-paper-sunken px-4 py-3 text-sm transition-colors focus:border-accent"
+                            />
+                        </div>
 
-                    <button
-                        type="submit"
-                        disabled={isLoading}
-                        className="w-full bg-foreground text-background py-3 font-medium hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
-                    >
-                        {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Continue"}
-                    </button>
-                </form>
+                        <div>
+                            <label
+                                htmlFor="password"
+                                className="mb-1.5 block text-sm font-semibold"
+                            >
+                                비밀번호
+                            </label>
+                            <input
+                                id="password"
+                                name="password"
+                                type="password"
+                                autoComplete="current-password"
+                                required
+                                defaultValue="password123"
+                                className="w-full border border-rule bg-paper-sunken px-4 py-3 text-sm transition-colors focus:border-accent"
+                            />
+                        </div>
 
-                <div className="mt-8 pt-6 border-t border-border text-center text-xs text-muted">
-                    Test Account: <span className="text-foreground">test@example.com</span> / <span className="text-foreground">password123</span>
+                        {error && (
+                            <p
+                                role="alert"
+                                className="flex items-start gap-2 border border-danger/30 bg-danger-wash px-4 py-3 text-sm text-danger"
+                            >
+                                <AlertCircle
+                                    className="mt-0.5 h-4 w-4 shrink-0"
+                                    aria-hidden="true"
+                                />
+                                {error}
+                            </p>
+                        )}
+
+                        <Button
+                            type="submit"
+                            size="lg"
+                            disabled={isLoading}
+                            className="w-full"
+                        >
+                            {isLoading ? (
+                                <>
+                                    <Loader2
+                                        className="h-4 w-4 animate-spin"
+                                        aria-hidden="true"
+                                    />
+                                    확인하는 중
+                                </>
+                            ) : (
+                                "로그인"
+                            )}
+                        </Button>
+                    </form>
+
+                    <p className="mt-7 border-t border-rule pt-5 text-center text-xs leading-relaxed text-graphite-faint">
+                        체험용 계정 · test@example.com / password123
+                    </p>
                 </div>
+
+                <p className="mt-6 text-center text-sm text-graphite-soft">
+                    아직 둘러보는 중이신가요?{" "}
+                    <Link href="/community" className="font-semibold text-accent hover:underline">
+                        로그인 없이 읽어보기
+                    </Link>
+                </p>
             </div>
         </div>
     );
