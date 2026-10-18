@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 const DRAFTS = [
     { href: "/drafts/editorial", label: "A", name: "에디토리얼" },
     { href: "/drafts/hub", label: "B", name: "커뮤니티 허브" },
+    { href: "/drafts/white", label: "C", name: "화이트 프리미엄" },
 ];
 
 // Floating pill for flipping between drafts during review

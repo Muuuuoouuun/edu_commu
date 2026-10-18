@@ -36,6 +36,17 @@
   --color-lilac: #e2dcf0;
   --color-mist: #dde4e8;
   --color-plum: #7a5aa6;
+
+  --animate-marquee: marquee 48s linear infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
 }
 
 /* Fonts are injected by app/drafts/layout.tsx via next/font, so resolve them at the usage site */

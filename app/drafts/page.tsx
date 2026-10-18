@@ -24,26 +24,37 @@ const DRAFTS = [
         sample: "font-kr font-black",
         tone: "bg-white",
     },
+    {
+        href: "/drafts/white",
+        label: "시안 C",
+        name: "화이트 프리미엄",
+        concept: "흰 바탕과 넓은 여백, 절제된 타이포로 정리한 깔끔한 홈. 곳곳의 작은 모션이 조용한 화면에 아기자기한 생기를 더합니다.",
+        points: ["단어 단위로 떠오르는 헤드라인과 둥실 떠 있는 스티커", "키워드가 바뀌는 검색창, 숫자가 올라가는 지표", "에디터 픽 · 흐르는 키워드 띠", "하트가 톡 터지는 좋아요, 말풍선 타이핑 모션", "슬라이딩 탭으로 바뀌는 우리 동네 추천"],
+        fit: "프리미엄 브랜드 인상과 깔끔함이 가장 중요할 때",
+        palette: ["#ffffff", "#fafaf9", "#1d1b18", "#c4623a", "#f4e7b9", "#e2dcf0"],
+        sample: "font-kr font-semibold tracking-[-0.04em]",
+        tone: "bg-white",
+    },
 ];
 
 export default function DraftsIndexPage() {
     return (
         <div className="min-h-screen bg-paper-deep px-5 py-14 text-ink md:px-10 md:py-20">
-            <div className="mx-auto max-w-6xl">
+            <div className="mx-auto max-w-7xl">
                 <p className="text-sm font-semibold text-terracotta">LUMIERE · 홈 리디자인</p>
-                <h1 className="mt-3 text-3xl font-black tracking-tight md:text-5xl">홈 화면 디자인 시안 2종</h1>
+                <h1 className="mt-3 text-3xl font-black tracking-tight md:text-5xl">홈 화면 디자인 시안 3종</h1>
                 <p className="mt-4 max-w-2xl leading-relaxed text-ink/60">
-                    같은 콘텐츠(매거진, 커뮤니티, 큐레이션, 학원·교재 추천)를 두 가지 방향으로 정리했습니다. 각 시안은 데스크톱과 모바일 모두 대응하며, 화면 하단의 전환 버튼으로 바로 비교할 수 있습니다.
+                    같은 콘텐츠(매거진, 커뮤니티, 큐레이션, 학원·교재 추천)를 세 가지 방향으로 정리했습니다. 각 시안은 데스크톱과 모바일 모두 대응하며, 화면 하단의 전환 버튼으로 바로 비교할 수 있습니다.
                 </p>
 
-                <div className="mt-12 grid gap-6 md:grid-cols-2">
+                <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                     {DRAFTS.map((draft) => (
                         <Link key={draft.href} href={draft.href} className={`group flex flex-col rounded-[28px] p-7 shadow-sm ring-1 ring-ink/5 transition-shadow hover:shadow-lg md:p-9 ${draft.tone}`}>
                             <div className="flex items-center justify-between">
                                 <span className="rounded-full bg-ink px-3 py-1 text-xs font-bold text-paper">{draft.label}</span>
                                 <div className="flex -space-x-1.5">
                                     {draft.palette.map((color) => (
-                                        <span key={color} className="h-6 w-6 rounded-full ring-2 ring-white" style={{ backgroundColor: color }} />
+                                        <span key={color} className="h-6 w-6 rounded-full shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)] ring-2 ring-white" style={{ backgroundColor: color }} />
                                     ))}
                                 </div>
                             </div>
@@ -68,7 +79,7 @@ export default function DraftsIndexPage() {
                 </div>
 
                 <section className="mt-14 rounded-[28px] bg-paper p-7 md:p-9">
-                    <h2 className="text-lg font-bold">두 시안 공통 개선 사항</h2>
+                    <h2 className="text-lg font-bold">세 시안 공통 개선 사항</h2>
                     <ul className="mt-4 grid gap-x-8 gap-y-2 text-sm leading-relaxed text-ink/70 md:grid-cols-2">
                         <li>· 영문 더미 기사 → 서비스 주제에 맞는 한국어 콘텐츠로 교체</li>
                         <li>· 외부 이미지 의존 제거, 브랜드 팔레트의 자체 일러스트 사용</li>
