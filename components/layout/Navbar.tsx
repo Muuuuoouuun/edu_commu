@@ -1,11 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Search, Menu } from "lucide-react";
 import { motion } from "framer-motion";
 import { UserButton } from "./UserButton";
 
 export function Navbar() {
+    const pathname = usePathname();
+    // Design drafts render their own header
+    if (pathname?.startsWith("/drafts")) return null;
+
     return (
         <motion.header
             initial={{ y: -100 }}

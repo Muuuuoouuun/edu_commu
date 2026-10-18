@@ -22,6 +22,26 @@
   --color-text-tertiary: #8b8b93;
   --radius-card-xl: 30px;
   --shadow-card-soft: 0 14px 40px rgba(0, 0, 0, 0.05);
+
+  /* Home redesign drafts (app/drafts) */
+  --color-paper: #f4f1ea;
+  --color-paper-deep: #ebe5d8;
+  --color-ink: #1d1b18;
+  --color-rule: #d6cebd;
+  --color-forest: #2e3a32;
+  --color-terracotta: #c4623a;
+  --color-sage: #dde5d0;
+  --color-butter: #f4e7b9;
+  --color-blush: #f2dfd2;
+  --color-lilac: #e2dcf0;
+  --color-mist: #dde4e8;
+  --color-plum: #7a5aa6;
+}
+
+/* Fonts are injected by app/drafts/layout.tsx via next/font, so resolve them at the usage site */
+@theme inline {
+  --font-kr: "Pretendard Variable", Pretendard, var(--font-kr-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-kr-serif), ui-serif, Georgia, serif;
 }
 
 @layer base {

@@ -1,5 +1,13 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+
 export function Footer() {
+    const pathname = usePathname();
+    // Design drafts render their own footer
+    if (pathname?.startsWith("/drafts")) return null;
+
     return (
         <footer className="bg-background border-t border-border py-12 mt-20">
             <div className="container mx-auto px-4 md:px-6">
